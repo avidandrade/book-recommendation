@@ -23,6 +23,10 @@ public class BookService {
         return bookRepository.saveAll(books);
     }
 
+    public Book createBook(Book book){
+        return bookRepository.save(book);
+    }
+    
     public Optional<Book> getBookById(Long id) {
         return bookRepository.findById(id);
     }

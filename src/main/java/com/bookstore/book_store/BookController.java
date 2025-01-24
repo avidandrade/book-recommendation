@@ -27,6 +27,10 @@ public class BookController {
     public List<Book> createBooks(@Validated @RequestBody List<Book> books){
         return bookService.createBooks(books);
     }
+    @PostMapping("/book")
+    public Book createBook(@Validated @RequestBody Book book){
+        return bookService.createBook(book);
+    }
     
     @GetMapping("/books/{id}")
     public Optional<Book> getBookById(@PathVariable Long id){
