@@ -4,13 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/recommendations")
 public class RecommendationController {
 
     @Autowired
     private openAIService openAIService;
 
-    @GetMapping
+    @GetMapping("/recommendations")
     public String getRecommendations(@RequestParam String preferences) {
         return openAIService.getRecommendations(preferences);
     }
