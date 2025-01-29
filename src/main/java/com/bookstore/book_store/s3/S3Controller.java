@@ -1,6 +1,5 @@
 package com.bookstore.book_store.s3;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
