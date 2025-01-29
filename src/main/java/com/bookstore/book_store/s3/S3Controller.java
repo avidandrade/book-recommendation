@@ -2,6 +2,7 @@ package com.bookstore.book_store.s3;
 
 import java.io.IOException;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,13 +22,15 @@ public class S3Controller {
 
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile multipartFile) {
-        String key = multipartFile.getOriginalFilename();
-        try {
+        String key = multipartFile.getOriginalFilename(); //get name of file
+        try{
             byte[] fileBytes = multipartFile.getBytes();
             s3Service.putObject(s3Service.getBucketName(), key, fileBytes);
-            return ResponseEntity.ok("File uploaded successfully: " + key);
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body("Failed to upload file: " + e.getMessage());
+            return ResponseEntity.ok("File uploaded successfully " + key);
+
+        }catch(IOException e){
+            e.printStackTrace();
+            return ResponseEntity.status(500).body( "Error uploading file");
         }
     }
 
