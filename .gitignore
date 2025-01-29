@@ -70,3 +70,6 @@ jspm_packages/
 
 # Windows
 Thumbs.db
+
+#Credentials in Springboot 
+application.properties
