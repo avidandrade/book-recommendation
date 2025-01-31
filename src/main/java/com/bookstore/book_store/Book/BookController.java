@@ -49,7 +49,7 @@ public class BookController {
     }
 
     @GetMapping("/searchbooks")
-    public String getBookFromAPI(@RequestParam String query){
+    public List<BookDetails> getBookFromAPI(@RequestParam String query){
         return bookService.fetchBooks(query);  
     }
 

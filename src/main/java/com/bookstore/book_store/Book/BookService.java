@@ -1,12 +1,16 @@
 package com.bookstore.book_store.Book;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -20,19 +24,47 @@ public class BookService {
     private final String API_URL = "https://www.googleapis.com/books/v1/volumes?q=";
 
     //Fetching books from API
-    public String fetchBooks(String query){
+    public List<BookDetails> fetchBooks(String query) {
         RestTemplate restTemplate = new RestTemplate();
         String url = API_URL + query + "&maxResults=" + maxResults;
-        try{
-            //The query is created here that creates a url from our application, parameter of userinput and maxResults.
-
-            //RestTemplate object is creating a get request to the google books api by sending the query url and storing the payload in response.
+        List<BookDetails> bookDetailsList = new ArrayList<>();
+        try {
             String response = restTemplate.getForObject(url, String.class);
-            return response;
-        }catch(Exception e){
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(response);
+            JsonNode items = root.path("items");
+            if (items.isArray()) {
+                for (JsonNode item : items) {
+                    String title = item.path("volumeInfo").path("title").asText();
+                    String authors = item.path("volumeInfo").path("authors").toString();
+                    String description = item.path("volumeInfo").path("description").asText();
+                    
+                    // Extract ISBN
+                    String isbn = "";
+                    JsonNode industryIdentifiers = item.path("volumeInfo").path("industryIdentifiers");
+                    if (industryIdentifiers.isArray()) {
+                        for (JsonNode identifier : industryIdentifiers) {
+                            if ("ISBN_13".equals(identifier.path("type").asText())) {
+                                isbn = identifier.path("identifier").asText();
+                                break;
+                            }
+                        }
+                    }
+
+                    // Extract genre (categories)
+                    String genre = "";
+                    JsonNode categories = item.path("volumeInfo").path("categories");
+                    if (categories.isArray() && categories.size() > 0) {
+                        genre = categories.get(0).asText();
+                    }
+
+                    bookDetailsList.add(new BookDetails(title, authors, genre,description, isbn));
+                }
+            }
+        } catch (Exception e) {
             e.printStackTrace();
-            return "Error fetching books";
         }
+        return bookDetailsList;
     }
     
     public List<Book> getAllBooks(){ 
