@@ -1,0 +1,26 @@
+.book-cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.book-card {
+    background: linear-gradient(180.2deg, rgb(30, 33, 48) 6.8%, rgb(74, 98, 110) 131%);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 50%;
+    height: 100%;
+    color: white;
+}
+
+.book-card h3 {
+    margin-top: 0;
+}
+
+.book-card p {
+    margin: 10px 0;
+}
