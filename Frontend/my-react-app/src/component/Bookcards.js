@@ -10,7 +10,6 @@ const BookCards = () => {
         try{
             const response = await fetch(`http://localhost:8080/searchbooks?query=${SearchQuery}`);
             const data = await response.json();
-            console.log(data);
             setBooks(data);
         }catch(error){
             console.error('Error fetching books from api', error);
@@ -57,8 +56,8 @@ const BookCards = () => {
                 />
                 <button type="submit">Search</button>
             </form>
-            {books.map((book, index) => (
-                <div key={index} className="book-card">
+            {books.map((book) => (
+                <div key={book.id} className="book-card">
                      <img src={book.coverImageUrl} alt="Book Cover" className="book-cover" />
                     <h3>{book.title}</h3>
                     <p><strong>Authors:</strong> {book.authors}</p>
