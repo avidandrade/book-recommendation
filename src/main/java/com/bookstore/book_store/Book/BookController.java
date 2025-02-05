@@ -24,11 +24,11 @@ public class BookController {
         return bookService.getAllBooks();
     }
 
-    @PostMapping("/books")
+    @PostMapping("/saveBooks")
     public List<Book> createBooks(@Validated @RequestBody List<Book> books){
         return bookService.createBooks(books);
     }
-    @PostMapping("/book")
+    @PostMapping("/saveBook")
     public Book createBook(@Validated @RequestBody Book book){
         return bookService.createBook(book);
     }
@@ -49,7 +49,7 @@ public class BookController {
     }
 
     @GetMapping("/searchbooks")
-    public List<BookDetails> getBookFromAPI(@RequestParam String query){
+    public List<Book> getBookFromAPI(@RequestParam String query){
         return bookService.fetchBooks(query);  
     }
 

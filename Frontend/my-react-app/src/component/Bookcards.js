@@ -10,6 +10,7 @@ const BookCards = () => {
         try{
             const response = await fetch(`http://localhost:8080/searchbooks?query=${SearchQuery}`);
             const data = await response.json();
+            console.log(data);
             setBooks(data);
         }catch(error){
             console.error('Error fetching books from api', error);
@@ -27,7 +28,7 @@ const BookCards = () => {
 
     const handleSaveBook = async (book) =>{
         try{
-            const response = await fetch(`http://localhost:8080/createBook`, {
+            const response = await fetch(`http://localhost:8080/saveBook`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -35,8 +36,13 @@ const BookCards = () => {
                 body: JSON.stringify(book),
             })
 
+            if(response.ok){
+                console.log('Book saved successfully');
+            }else{
+                console.error('Error saving book');
+            }
         }catch(error){
-            console.error('Error saving book', error);
+            console.error('Error running function', error);
         }
     };
 
@@ -53,6 +59,7 @@ const BookCards = () => {
             </form>
             {books.map((book, index) => (
                 <div key={index} className="book-card">
+                     <img src={book.coverImageUrl} alt="Book Cover" className="book-cover" />
                     <h3>{book.title}</h3>
                     <p><strong>Authors:</strong> {book.authors}</p>
                     <p><strong>Description:</strong> {book.description}</p>

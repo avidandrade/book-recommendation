@@ -13,39 +13,23 @@ import jakarta.persistence.Table;
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SuppressWarnings("unused")
     private Long id;
- 
+
     private String title;
     private String author;
     private String genre;
-    private double rating;
-    private double price;
-    private String ISBN;
-    private String Description;
-    private int soldcopies;
-    private String publisher;
+    private String description;
+    private String isbn;
+    private String coverImageUrl;
 
-    public Book(){}
-
-    public Book(String title, String author, String genre, double rating, double price, String iSBN,
-            String description, int soldcopies, String publisher) {
+    public Book(String title, String author, String genre, String description, String isbn, String coverImageUrl) {
         this.title = title;
         this.author = author;
         this.genre = genre;
-        this.rating = rating;
-        this.price = price;
-        this.ISBN = iSBN;
-        Description = description;
-        this.soldcopies = soldcopies;
-        this.publisher = publisher;
-    }
-    
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        this.description = description;
+        this.isbn = isbn;
+        this.coverImageUrl = coverImageUrl;
     }
 
     public String getTitle() {
@@ -72,52 +56,28 @@ public class Book {
         this.genre = genre;
     }
 
-    public double getRating() {
-        return rating;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public String getISBN() {
-        return ISBN;
-    }
-
-    public void setISBN(String iSBN) {
-        this.ISBN = iSBN;
-    }
-
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String description) {
-        this.Description = description;
+        this.description = description;
     }
 
-    public int getSoldcopies() {
-        return soldcopies;
+    public String getIsbn() {
+        return isbn;
     }
 
-    public void setSoldcopies(int soldcopies) {
-        this.soldcopies = soldcopies;
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
-    public String getPublisher() {
-        return publisher;
+    public String getCoverImageUrl() {
+        return coverImageUrl;
     }
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
+    public void setCoverImageUrl(String coverImageUrl) {
+        this.coverImageUrl = coverImageUrl;
     }
-
+    
 }
