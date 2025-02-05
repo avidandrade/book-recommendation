@@ -37,7 +37,7 @@ const BookCards = () => {
             })
 
             if(response.ok){
-                console.log('Book saved successfully');
+                console.log('Book saved successfully', book);
             }else{
                 console.error('Error saving book');
             }
