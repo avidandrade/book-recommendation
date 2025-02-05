@@ -1,5 +1,6 @@
 package com.bookstore.book_store.Book;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,25 +10,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.bookstore.book_store.s3.S3Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.EntityNotFoundException;
+
 
 @Service
 public class BookService {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private S3Service s3Service;
+
     private final int maxResults = 5;
 
     private final String API_URL = "https://www.googleapis.com/books/v1/volumes?q=";
 
     //Fetching books from API
-    public List<BookDetails> fetchBooks(String query) {
+    public List<Book> fetchBooks(String query) {
         RestTemplate restTemplate = new RestTemplate();
         String url = API_URL + query + "&maxResults=" + maxResults;
-        List<BookDetails> bookDetailsList = new ArrayList<>();
+        List<Book> bookDetailsList = new ArrayList<>();
         try {
             String response = restTemplate.getForObject(url, String.class);
             ObjectMapper mapper = new ObjectMapper();
@@ -57,12 +64,17 @@ public class BookService {
                     if (categories.isArray() && categories.size() > 0) {
                         genre = categories.get(0).asText();
                     }
+                    String coverImageUrl = "";
+                    JsonNode imageLinks = item.path("volumeInfo").path("imageLinks");
+                    if (imageLinks.has("thumbnail")) {
+                        coverImageUrl = imageLinks.path("thumbnail").asText();
+                    }
 
-                    bookDetailsList.add(new BookDetails(title, authors, genre,description, isbn));
+                    bookDetailsList.add(new Book(title, authors, genre,description, isbn, coverImageUrl));
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            return null;
         }
         return bookDetailsList;
     }
@@ -76,6 +88,7 @@ public class BookService {
     }
 
     public Book createBook(Book book){
+        s3Service.uploadImageToS3(book.getCoverImageUrl(), book.getTitle());
         return bookRepository.save(book);
     }
 
@@ -102,7 +115,7 @@ public class BookService {
                 }
             }
         }catch(IllegalAccessException e){
-             e.printStackTrace();
+            return null;
         }
 
         return bookRepository.save(existingBook);
