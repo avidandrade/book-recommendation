@@ -1,5 +1,6 @@
 package com.bookstore.book_store.Book;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,6 +20,7 @@ public class Book {
     private String title;
     private String author;
     private String genre;
+    @Column(columnDefinition = "TEXT")
     private String description;
     private String isbn;
     private String coverImageUrl;
