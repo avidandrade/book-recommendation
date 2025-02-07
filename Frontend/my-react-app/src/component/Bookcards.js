@@ -4,6 +4,7 @@ import './Bookcards.css';
 const BookCards = () => {
     const[books, setBooks] = useState([]);
     const[query, setQuery] = useState('');
+    const[userBooks, setUserBooks] = useState([]);
 
 
     const fetchBooks = async(SearchQuery) => {
@@ -34,7 +35,7 @@ const BookCards = () => {
                 },
                 body: JSON.stringify(book),
             })
-
+            setBooks([userBooks]);
             if(response.ok){
                 console.log('Book saved successfully', book);
             }else{
@@ -42,6 +43,26 @@ const BookCards = () => {
             }
         }catch(error){
             console.error('Error running function', error);
+        }
+    };
+
+    const handleRetrieveBooks = async () => {
+        try{
+            const response = await fetch(`http://localhost:8080/books`,{
+                method: 'GET',
+                headers: { 
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if(response.ok){
+                const data = await response.json();
+                setUserBooks(data);
+            }else{
+                console.error('Error retrieving books');
+            }
+        }catch(error){
+            console.error('Error retrieving books from database;');
         }
     };
 
@@ -65,6 +86,19 @@ const BookCards = () => {
                     <p><strong>ISBN:</strong> {book.isbn}</p>
                     <p><strong>Genre:</strong> {book.genre}</p>
                     <button onClick={() => handleSaveBook(book)}>Save</button>
+                </div>
+            ))}
+
+            <button onClick={handleRetrieveBooks}>Retrieve save books!</button>
+
+            {userBooks.map((userBook) => (
+                <div key={userBook.id} className="book-card">
+                     <img src={userBook.coverImageUrl} alt="Book Cover" className="book-cover" />
+                    <h3>{userBook.title}</h3>
+                    <p><strong>Authors:</strong> {userBook.authors}</p>
+                    <p><strong>Description:</strong> {userBook.description}</p>
+                    <p><strong>ISBN:</strong> {userBook.isbn}</p>
+                    <p><strong>Genre:</strong> {userBook.genre}</p>
                 </div>
             ))}
         </div>
