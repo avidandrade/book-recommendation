@@ -25,6 +25,10 @@ public class Book {
     private String isbn;
     private String coverImageUrl;
 
+    public Book(){
+        
+    }
+
     public Book(String title, String author, String genre, String description, String isbn, String coverImageUrl) {
         this.title = title;
         this.author = author;
