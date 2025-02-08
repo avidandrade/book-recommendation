@@ -18,7 +18,7 @@ public class Book {
     private Long id;
 
     private String title;
-    private String author;
+    private String authors;
     private String genre;
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -29,9 +29,9 @@ public class Book {
         
     }
 
-    public Book(String title, String author, String genre, String description, String isbn, String coverImageUrl) {
+    public Book(String title, String authors, String genre, String description, String isbn, String coverImageUrl) {
         this.title = title;
-        this.author = author;
+        this.authors = authors;
         this.genre = genre;
         this.description = description;
         this.isbn = isbn;
@@ -46,12 +46,12 @@ public class Book {
         this.title = title;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getAuthors() {
+        return authors;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setAuthors(String authors) {
+        this.authors = authors;
     }
 
     public String getGenre() {
