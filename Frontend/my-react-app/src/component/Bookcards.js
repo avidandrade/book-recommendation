@@ -35,7 +35,6 @@ const BookCards = () => {
                 },
                 body: JSON.stringify(book),
             })
-            setBooks([userBooks]);
             if(response.ok){
                 console.log('Book saved successfully', book);
             }else{
@@ -81,7 +80,7 @@ const BookCards = () => {
                 <div key={book.id} className="book-card">
                      <img src={book.coverImageUrl} alt="Book Cover" className="book-cover" />
                     <h3>{book.title}</h3>
-                    <p><strong>Authors:</strong> {book.authors}</p>
+                    <p>Authors: {(Array.isArray(book.authors) ? book.authors : []).join(', ')}</p>
                     <p><strong>Description:</strong> {book.description}</p>
                     <p><strong>ISBN:</strong> {book.isbn}</p>
                     <p><strong>Genre:</strong> {book.genre}</p>
@@ -95,7 +94,7 @@ const BookCards = () => {
                 <div key={userBook.id} className="book-card">
                      <img src={userBook.coverImageUrl} alt="Book Cover" className="book-cover" />
                     <h3>{userBook.title}</h3>
-                    <p><strong>Authors:</strong> {userBook.authors}</p>
+                    <p><strong>Authors:</strong> {(Array.isArray(userBook.authors) ? userBook.authors : []).join(', ')}</p>
                     <p><strong>Description:</strong> {userBook.description}</p>
                     <p><strong>ISBN:</strong> {userBook.isbn}</p>
                     <p><strong>Genre:</strong> {userBook.genre}</p>

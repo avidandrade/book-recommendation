@@ -1,5 +1,11 @@
 package com.bookstore.book_store.Book;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,7 +24,9 @@ public class Book {
     private Long id;
 
     private String title;
+
     private String authors;
+
     private String genre;
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -46,13 +54,14 @@ public class Book {
         this.title = title;
     }
 
-    public String getAuthors() {
-        return authors;
+    public List<String> getAuthors() {
+        return authors == null ? new ArrayList<>() : new Gson().fromJson(authors, new TypeToken<List<String>>(){}.getType());
     }
 
-    public void setAuthors(String authors) {
-        this.authors = authors;
+    public void setAuthors(List<String> authorsList) {
+        this.authors = new Gson().toJson(authorsList);
     }
+
 
     public String getGenre() {
         return genre;
