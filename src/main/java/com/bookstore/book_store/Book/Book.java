@@ -20,7 +20,6 @@ import jakarta.persistence.Table;
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @SuppressWarnings("unused")
     private Long id;
 
     private String title;
@@ -31,6 +30,8 @@ public class Book {
     @Column(columnDefinition = "TEXT")
     private String description;
     private String isbn;
+
+    @Column(columnDefinition = "cover_image_url")
     private String coverImageUrl;
 
     public Book(){
@@ -93,6 +94,14 @@ public class Book {
 
     public void setCoverImageUrl(String coverImageUrl) {
         this.coverImageUrl = coverImageUrl;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
     
 }

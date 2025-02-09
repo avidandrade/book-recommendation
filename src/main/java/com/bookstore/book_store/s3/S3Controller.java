@@ -20,7 +20,6 @@ public class S3Controller {
         try{
             return s3Service.uploadImageToS3(url,title);
         }catch(Exception e){
-            e.printStackTrace();
             return "Error uploading file";
         }
         

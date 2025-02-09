@@ -31,18 +31,21 @@ public class S3Service {
 
     
     public String uploadImageToS3(String imageUrl, String title) {
+        System.out.println("BucketName: " + bucketName);
+        System.out.println("accessKey" + awsKey);
         try {
             // Download the image
             URL url = new URL(imageUrl);
             File tempFile;
             try (InputStream inputStream = url.openStream()) {
                 tempFile = File.createTempFile(title, ".jpg");
-                FileOutputStream outputStream = new FileOutputStream(tempFile);
-                byte[] buffer = new byte[2048];
-                int bytesRead;
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    outputStream.write(buffer, 0, bytesRead);
-                }   outputStream.close();
+                try (FileOutputStream outputStream = new FileOutputStream(tempFile)) {
+                    byte[] buffer = new byte[2048];
+                    int bytesRead;
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+                }
             }
 
             // Upload the image to S3
