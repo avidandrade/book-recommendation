@@ -4,6 +4,7 @@ import './Bookcards.css';
 const BookCards = () => {
     const[books, setBooks] = useState([]);
     const[query, setQuery] = useState('');
+    const [mood, setMood] = useState('');
     const[userBooks, setUserBooks] = useState([]);
 
 
@@ -15,16 +16,34 @@ const BookCards = () => {
         }catch(error){
             console.error('Error fetching books from api', error);
         }
-    }
+    };
+
+    const fetchRecommendedBooks = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/books/recommend?mood=${mood}`);
+            const data = await response.json();
+            setBooks(data);
+        } catch (error) {
+            console.error('Error fetching recommended books', error);
+        }
+    };
 
     const handleInputChange = (event) => {
         setQuery(event.target.value);
-    }
+    };
 
     const handleFormSubmit = (event) => {
         event.preventDefault();
         fetchBooks(query);
     };
+    const handleMoodChange = (event) => {
+        setMood(event.target.value);
+    };
+    const handleMoodSubmit = (event) => {
+        event.preventDefault();
+        fetchRecommendedBooks();
+    };
+    
 
     const handleSaveBook = async (book) =>{
         try{
@@ -66,6 +85,7 @@ const BookCards = () => {
     };
 
     return (
+        
         <div className="book-cards-container">
             <form onSubmit={handleFormSubmit}>
                 <input
@@ -76,6 +96,17 @@ const BookCards = () => {
                 />
                 <button type="submit">Search</button>
             </form>
+
+            <form onSubmit={handleMoodSubmit}>
+                <input
+                    type="text"
+                    value={mood}
+                    onChange={handleMoodChange}
+                    placeholder="Enter your mood (e.g., adventurous, sad, romantic)"
+                />
+                <button type="submit">Recommend Books</button>
+            </form>
+
             {books.map((book) => (
                 <div key={book.id} className="book-card">
                      <img src={book.coverImageUrl} alt="Book Cover" className="book-cover" />
