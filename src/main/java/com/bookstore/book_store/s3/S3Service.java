@@ -52,7 +52,7 @@ public class S3Service {
             String key = "bookcovers/" + tempFile.getName();
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                     .bucket(bucketName)
-                    .key(awsKey)
+                    .key(title)
                     .build();
             s3Client.putObject(putObjectRequest, RequestBody.fromFile(tempFile));
 
