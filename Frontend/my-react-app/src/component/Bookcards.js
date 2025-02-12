@@ -1,20 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import './Bookcards.css';
 
 const BookCards = () => {
     const[books, setBooks] = useState([]);
     const[query, setQuery] = useState('');
+    const[page, setPage] = useState(0);
     const [mood, setMood] = useState('');
     const[userBooks, setUserBooks] = useState([]);
 
 
-    const fetchBooks = async(SearchQuery) => {
-        try{
-            const response = await fetch(`http://localhost:8080/searchbooks?query=${SearchQuery}`);
+    const fetchBooks = async (SearchQuery, pageNumber = 0) => {
+        try {
+            const response = await fetch(`http://localhost:8080/searchbooks?query=${SearchQuery}&page=${pageNumber}`);
             const data = await response.json();
+
             setBooks(data);
-        }catch(error){
-            console.error('Error fetching books from api', error);
+            setPage(pageNumber);
+        } catch (error) {
+            console.error('Error fetching books from API', error);
         }
     };
 
@@ -107,17 +110,19 @@ const BookCards = () => {
                 <button type="submit">Recommend Books</button>
             </form>
 
-            {books.map((book) => (
-                <div key={book.id} className="book-card">
-                     <img src={book.coverImageUrl} alt="Book Cover" className="book-cover" />
+            {Array.isArray(books) && books.map((book) => (
+                <div key={book.id || book.isbn || book.title} className="book-card">
+                    <img src={book.coverImageUrl} alt="Book Cover" className="book-cover" />
                     <h3>{book.title}</h3>
-                    <p>Authors: {(Array.isArray(book.authors) ? book.authors : []).join(', ')}</p>
+                    <p><strong>Authors:</strong> {(Array.isArray(book.authors) ? book.authors : []).join(', ')}</p>
                     <p><strong>Description:</strong> {book.description}</p>
                     <p><strong>ISBN:</strong> {book.isbn}</p>
                     <p><strong>Genre:</strong> {book.genre}</p>
                     <button onClick={() => handleSaveBook(book)}>Save</button>
                 </div>
             ))}
+
+            <button onClick={() => fetchBooks(query, page + 1)}>Load More Books</button>
 
             <button onClick={handleRetrieveBooks}>Retrieve save books!</button>
 
