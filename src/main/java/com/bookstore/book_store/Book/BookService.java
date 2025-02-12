@@ -31,9 +31,9 @@ public class BookService {
     private final String API_URL = "https://www.googleapis.com/books/v1/volumes?q=";
 
     //Fetching books from API
-    public List<Book> fetchBooks(String query) {
+    public List<Book> fetchBooks(String query, int page) {
         RestTemplate restTemplate = new RestTemplate();
-        String url = API_URL + query + "&maxResults=" + maxResults;
+        String url = API_URL + query + "&maxResults=" + maxResults + "&startIndex=" + (page * maxResults);
         List<Book> bookDetailsList = new ArrayList<>();
         try {
             String response = restTemplate.getForObject(url, String.class);
