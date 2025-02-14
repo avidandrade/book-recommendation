@@ -1,4 +1,4 @@
-package com.bookstore.book_store.openAI;
+package com.bookstore.book_store.Ollama3;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

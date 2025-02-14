@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.bookstore.book_store.openAI.OllamaService;
+import com.bookstore.book_store.Ollama3.OllamaService;
 import com.bookstore.book_store.s3.S3Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
