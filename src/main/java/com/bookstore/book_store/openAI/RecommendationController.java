@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.*;
 public class RecommendationController {
 
     @Autowired
-    private openAIService openAIService;
+    private OllamaService ollamaService;
 
-    @GetMapping("/recommendations")
-    public String getRecommendations(@RequestParam String preferences) {
-        return openAIService.getRecommendations(preferences);
+    @GetMapping("/generate")
+    public String generateQuery(@RequestParam String emotion){
+        return ollamaService.getRecommendedBookTitle(emotion);
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.bookstore.book_store.openAI.OllamaService;
 import com.bookstore.book_store.s3.S3Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,16 +25,31 @@ public class BookService {
     private BookRepository bookRepository;
 
     @Autowired
+    private OllamaService ollamaService;
+
+    @Autowired
     private S3Service s3Service;
 
-    private final int maxResults = 5;
+    private final int maxResults = 1;
 
     private final String API_URL = "https://www.googleapis.com/books/v1/volumes?q=";
 
+    public List<Book> fetchRecommendedBooks(String userInput) {
+        //Get a book title from Ollama AI
+        String bookTitle = ollamaService.getRecommendedBookTitle(userInput);
+        System.out.println(bookTitle);
+        if (bookTitle == null || bookTitle.isEmpty()) {
+            throw new RuntimeException("Ollama failed to generate a book title.");
+        }
+
+        // Fetch book details from Google Books API**
+        return fetchBooks(bookTitle);
+    }
+
     //Fetching books from API
-    public List<Book> fetchBooks(String query, int page) {
+    public List<Book> fetchBooks(String query) {
         RestTemplate restTemplate = new RestTemplate();
-        String url = API_URL + query + "&maxResults=" + maxResults + "&startIndex=" + (page * maxResults);
+        String url = API_URL + query + "&maxResults=" + maxResults;
         List<Book> bookDetailsList = new ArrayList<>();
         try {
             String response = restTemplate.getForObject(url, String.class);

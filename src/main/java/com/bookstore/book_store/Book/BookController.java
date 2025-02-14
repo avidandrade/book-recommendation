@@ -51,11 +51,16 @@ public class BookController {
         return bookService.updateBook(id, book);
     }
 
-    @GetMapping("/searchbooks")
-    public List<Book> getBookFromAPI(@RequestParam String query, @RequestParam int page){
-        List<Book> booksFromExternalAPI = bookService.fetchBooks(query, page);
-        Set<Book> uniqueBooks = new HashSet<>(booksFromExternalAPI);
-        return new ArrayList<>(uniqueBooks);
+    // @GetMapping("/searchbooks")
+    // public List<Book> getBookFromAPI(@RequestParam String query, @RequestParam int page){
+    //     List<Book> booksFromExternalAPI = bookService.fetchBooks(query, page);
+    //     Set<Book> uniqueBooks = new HashSet<>(booksFromExternalAPI);
+    //     return new ArrayList<>(uniqueBooks);
+    // }
+
+    @GetMapping("/recommend")
+    public List<Book> getRecommendedBooks(@RequestParam String input) {
+        return bookService.fetchRecommendedBooks(input);
     }
 
 
