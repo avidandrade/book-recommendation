@@ -11,7 +11,7 @@ const BookCards = () => {
 
     const fetchBooks = async (SearchQuery, pageNumber = 0) => {
         try {
-            const response = await fetch(`http://localhost:8080/searchbooks?query=${SearchQuery}&page=${pageNumber}`);
+            const response = await fetch(`http://localhost:8080/recommend?input=${SearchQuery}&page=${pageNumber}`);
             const data = await response.json();
 
             setBooks(data);
