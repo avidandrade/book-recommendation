@@ -1,6 +1,5 @@
 package com.bookstore.book_store.Ollama3;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -11,7 +10,6 @@ public class OllamaService {
 
     private final WebClient webClient;
     
-    @Autowired
     public OllamaService(@Value("${ollama.api.url}") String ollamaApiUrl) {
         this.webClient = WebClient.builder().baseUrl(ollamaApiUrl).build();
     }
