@@ -26,13 +26,7 @@ public class S3Service {
     @Value("${aws.bucketName}")
     private String bucketName;
 
-    @Value("${aws.accesskey}")
-    private String awsKey;
-
-    
     public String uploadImageToS3(String imageUrl, String title) {
-        System.out.println("BucketName: " + bucketName);
-        System.out.println("accessKey" + awsKey);
         try {
             // Download the image
             URL url = new URL(imageUrl);
