@@ -33,27 +33,37 @@ public class BookService {
     private final int maxResults = 1;
 
     private final String API_URL = "https://www.googleapis.com/books/v1/volumes?q=";
+    private RestTemplate restTemplate = new RestTemplate();
+    private ObjectMapper mapper = new ObjectMapper();
 
     public List<Book> fetchRecommendedBooks(String userInput) {
         //Get a book title from Ollama AI
-        String bookTitle = ollamaService.getRecommendedBookTitle(userInput);
-        System.out.println(bookTitle);
-        if (bookTitle == null || bookTitle.isEmpty()) {
+        List<String> bookTitles = ollamaService.getRecommendedBookTitle(userInput);
+        System.out.println(bookTitles);
+        if (bookTitles == null || bookTitles.isEmpty()) {
             throw new RuntimeException("Ollama failed to generate a book title.");
         }
 
         // Fetch book details from Google Books API**
-        return fetchBooks(bookTitle);
+        return fetchBooks(bookTitles);
     }
 
     //Fetching books from API
-    public List<Book> fetchBooks(String query) {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = API_URL + query + "&maxResults=" + maxResults;
-        List<Book> bookDetailsList = new ArrayList<>();
-        try {
-            String response = restTemplate.getForObject(url, String.class);
-            ObjectMapper mapper = new ObjectMapper();
+    public List<Book> fetchBooks(List<String> bookTitles) {
+            String url = "";
+            List<Book> books = new ArrayList<>();
+
+            for(String title : bookTitles){
+                url = API_URL + title + "&maxResults=" + maxResults;
+
+                String response = restTemplate.getForObject(url, String.class);
+                books.add(parseResponse(response));
+            }
+            return books;
+    }
+    
+    public Book parseResponse(String response){
+        try{
             JsonNode root = mapper.readTree(response);
             JsonNode items = root.path("items");
             if (items.isArray()) {
@@ -86,15 +96,16 @@ public class BookService {
                         coverImageUrl = imageLinks.path("thumbnail").asText();
                     }
 
-                    bookDetailsList.add(new Book(title, authors, genre,description, isbn, coverImageUrl));
-                }
+                    return new Book(title, authors, genre,description, isbn, coverImageUrl);
+                }       
             }
-        } catch (IOException e) {
+        }catch(IOException e){
             return null;
         }
-        return bookDetailsList;
+        return null;
     }
-    
+
+
     public List<Book> getAllBooks(){ 
         return bookRepository.findAll();
     }
@@ -137,4 +148,9 @@ public class BookService {
         return bookRepository.save(existingBook);
     }
 
+    public String testGoogleApi(String title){
+        RestTemplate restTemplate = new RestTemplate();
+        String url = API_URL + "The Best of Us" + "&maxResults=" + 3;
+        return restTemplate.getForObject(url, String.class);
+    }
 }

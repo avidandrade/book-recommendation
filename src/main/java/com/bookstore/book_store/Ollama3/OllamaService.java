@@ -1,5 +1,8 @@
 package com.bookstore.book_store.Ollama3;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -14,11 +17,12 @@ public class OllamaService {
         this.webClient = WebClient.builder().baseUrl(ollamaApiUrl).build();
     }
 
-    public String getRecommendedBookTitle(String userInput) {
-        String prompt = "Recommend a bestselling book title that strongly reflects the emotion: '" 
-        + userInput + "'. Respond with only the book title, no extra text.";
+    public List<String> getRecommendedBookTitle(String userInput) {
+        String prompt = "Recommend five bestselling book titles that strongly reflect the emotion: '"
+        + userInput + "'. Respond with a comma-separated list, with no numbering or extra text. Example: 'Book1, Book2, Book3, Book4, Book5'.";
 
-        return webClient.post()
+
+        String response = webClient.post()
                 .uri("/api/generate")
                 .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .bodyValue("{\"model\": \"llama3\", \"prompt\": \"" + prompt + "\"}")
@@ -28,6 +32,8 @@ public class OllamaService {
                 .collectList() // Collect all parts into a list
                 .map(list -> String.join("", list)) // Join parts into a single response
                 .block(); // Block to wait for the full response
+
+        return Arrays.asList(response.split("\\s*,\\s*")); 
     }
 
     // Inner class to match JSON structure
