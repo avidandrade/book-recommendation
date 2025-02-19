@@ -60,5 +60,10 @@ public class BookController {
         return bookService.fetchRecommendedBooks(input);
     }
 
+    @GetMapping("/testgoogleapi")
+    public String testGoogleApi(String title){
+        return bookService.testGoogleApi(title);
+    }
+
 
 }
