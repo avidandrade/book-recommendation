@@ -1,7 +1,11 @@
 package com.bookstore.book_store.Ollama3;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import com.bookstore.book_store.Book.Book;
 
 @RestController
 public class RecommendationController {
@@ -10,7 +14,7 @@ public class RecommendationController {
     private OllamaService ollamaService;
 
     @GetMapping("/generate")
-    public String generateQuery(@RequestParam String emotion){
+    public List<String> generateQuery(@RequestParam String emotion){
         return ollamaService.getRecommendedBookTitle(emotion);
     }
 }
