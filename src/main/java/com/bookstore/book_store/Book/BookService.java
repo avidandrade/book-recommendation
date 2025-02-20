@@ -30,7 +30,7 @@ public class BookService {
     @Autowired
     private S3Service s3Service;
 
-    private final int maxResults = 1;
+    private final int maxResults = 5;
 
     private final String API_URL = "https://www.googleapis.com/books/v1/volumes?q=";
     private RestTemplate restTemplate = new RestTemplate();
