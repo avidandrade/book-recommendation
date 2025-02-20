@@ -33,8 +33,8 @@ public class BookService {
     private final int maxResults = 5;
 
     private final String API_URL = "https://www.googleapis.com/books/v1/volumes?q=";
-    private RestTemplate restTemplate = new RestTemplate();
-    private ObjectMapper mapper = new ObjectMapper();
+    private final RestTemplate restTemplate = new RestTemplate();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     public List<Book> fetchRecommendedBooks(String userInput) {
         //Get a book title from Ollama AI
@@ -50,11 +50,11 @@ public class BookService {
 
     //Fetching books from API
     public List<Book> fetchBooks(List<String> bookTitles) {
-            String url = "";
+            
             List<Book> books = new ArrayList<>();
 
             for(String title : bookTitles){
-                url = API_URL + title + "&maxResults=" + maxResults;
+                String url = API_URL + title + "&maxResults=" + maxResults;
 
                 String response = restTemplate.getForObject(url, String.class);
                 books.add(parseResponse(response));
@@ -149,8 +149,8 @@ public class BookService {
     }
 
     public String testGoogleApi(String title){
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate rest = new RestTemplate();
         String url = API_URL + "The Best of Us" + "&maxResults=" + 3;
-        return restTemplate.getForObject(url, String.class);
+        return rest.getForObject(url, String.class);
     }
 }
