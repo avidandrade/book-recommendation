@@ -96,7 +96,7 @@ const BookCards = () => {
               </CardHeader>
               <CardContent>
                 <img src={book.coverImageUrl} alt="Book Cover" className="w-full h-40 object-cover rounded-md mb-2" />
-                <p className="text-sm text-gray-600">{book.description}</p>
+                <p className="text-sm text-white-600 line-clamp-6">{book.description}</p>
                 <p className="text-sm">
                   <strong>Genre:</strong> {book.genre || "N/A"}
                 </p>
@@ -120,7 +120,7 @@ const BookCards = () => {
       </div>
 
       {/* Display Saved Books */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
         {userBooks.length === 0 ? (
           <p>No saved books yet.</p>
         ) : (
@@ -134,7 +134,9 @@ const BookCards = () => {
               </CardHeader>
               <CardContent>
                 <img src={userBook.coverImageUrl} alt="Book Cover" className="w-full h-40 object-cover rounded-md mb-2" />
-                <p className="text-sm text-gray-600">{userBook.description}</p>
+                <p className="text-sm text-white-600 line-clamp-6">
+                  {userBook.description}
+                </p>
                 <p className="text-sm">
                   <strong>Genre:</strong> {userBook.genre || "N/A"}
                 </p>
