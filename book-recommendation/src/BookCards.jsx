@@ -71,6 +71,26 @@ const BookCards = () => {
     }
   };
 
+  const handleDeleteBook = async (bookId) => {
+    try {
+      const response = await fetch(`http://localhost:8080/books/${bookId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: bookId }),
+      });
+      if (response.ok) {
+        console.log("Book deleted successfully");
+        setUserBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookId));
+      } else {
+        console.error("Error deleting book");
+      }
+    } catch (error) {
+      console.error("Error deleting book from database");
+    }
+  };
+
   return (
     <div className="p-6 max-w-4xl mx-auto">
       {/* Search Bar */}
@@ -103,7 +123,7 @@ const BookCards = () => {
                 <p className="text-sm">
                   <strong>ISBN:</strong> {book.isbn || "N/A"}
                 </p>
-                <Button className="mt-2 w-full" onClick={() => handleSaveBook(book)}>
+                <Button className="mt-2 w-full size text-sm" onClick={() => handleDeleteBook(book)}>
                   Save Book
                 </Button>
               </CardContent>
@@ -143,6 +163,9 @@ const BookCards = () => {
                 <p className="text-sm">
                   <strong>ISBN:</strong> {userBook.isbn || "N/A"}
                 </p>
+                <Button className="mt-2 w-full text-sm" onClick={() => handleDeleteBook(userBook.id)}>
+                  Delete
+                </Button>
               </CardContent>
             </Card>
           ))
