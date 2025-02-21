@@ -109,7 +109,7 @@ const BookCards = () => {
           <p>No books found.</p>
         ) : (
           books.map((book) => (
-            <Card key={book.id || book.isbn || book.title} className="shadow-md">
+            <Card key={book.id || book.isbn || book.title} className="shadow-md fade-in">
               <CardHeader>
                 <CardTitle>{book.title}</CardTitle>
                 <CardDescription>By {Array.isArray(book.authors) ? book.authors.join(", ") : "Unknown"}</CardDescription>
@@ -145,7 +145,7 @@ const BookCards = () => {
           <p>No saved books yet.</p>
         ) : (
           userBooks.map((userBook) => (
-            <Card key={userBook.id} className="shadow-md">
+            <Card key={userBook.id} className="shadow-md fade-in">
               <CardHeader>
                 <CardTitle>{userBook.title}</CardTitle>
                 <CardDescription>
