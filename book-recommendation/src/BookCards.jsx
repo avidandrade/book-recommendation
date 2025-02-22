@@ -123,7 +123,7 @@ const BookCards = () => {
                 <p className="text-sm">
                   <strong>ISBN:</strong> {book.isbn || "N/A"}
                 </p>
-                <Button className="mt-2 w-full size text-sm" onClick={() => handleDeleteBook(book)}>
+                <Button className="mt-2 w-full size text-sm" onClick={() => handleSaveBook(book)}>
                   Save Book
                 </Button>
               </CardContent>
