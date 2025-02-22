@@ -34,17 +34,20 @@ public class Book {
     @Column(columnDefinition = "cover_image_url")
     private String coverImageUrl;
 
+    private int rating;
+
     public Book(){
         
     }
 
-    public Book(String title, String authors, String genre, String description, String isbn, String coverImageUrl) {
+    public Book(String title, String authors, String genre, String description, String isbn, String coverImageUrl, int rating) {
         this.title = title;
         this.authors = authors;
         this.genre = genre;
         this.description = description;
         this.isbn = isbn;
         this.coverImageUrl = coverImageUrl;
+        this.rating = rating;
     }
 
     public String getTitle() {
@@ -102,6 +105,14 @@ public class Book {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
     
 }
