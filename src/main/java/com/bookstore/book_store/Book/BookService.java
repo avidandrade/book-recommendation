@@ -71,6 +71,7 @@ public class BookService {
                     String title = item.path("volumeInfo").path("title").asText();
                     String authors = item.path("volumeInfo").path("authors").toString();
                     String description = item.path("volumeInfo").path("description").asText();
+                    int rating = item.path("volumeInfo").path("averageRating").asInt();
                     
                     // Extract ISBN
                     String isbn = "";
@@ -96,7 +97,7 @@ public class BookService {
                         coverImageUrl = imageLinks.path("thumbnail").asText();
                     }
 
-                    return new Book(title, authors, genre,description, isbn, coverImageUrl);
+                    return new Book(title, authors, genre,description, isbn, coverImageUrl, rating);
                 }       
             }
         }catch(IOException e){
