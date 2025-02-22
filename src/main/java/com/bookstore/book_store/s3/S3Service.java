@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +31,13 @@ public class S3Service {
     public String uploadImageToS3(String imageUrl, String title) {
         try {
             // Download the image
-            URL url = new URL(imageUrl);
+            URI uri;
+            try {
+                uri = new URI(imageUrl);
+            } catch (URISyntaxException e) {
+                return "Invalid URL";
+            }
+            URL url = uri.toURL();
             File tempFile;
             try (InputStream inputStream = url.openStream()) {
                 tempFile = File.createTempFile(title, ".jpg");
