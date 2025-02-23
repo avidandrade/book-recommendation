@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { toast, Toaster } from 'sonner';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 
 
@@ -43,9 +44,11 @@ const BookCards = () => {
         body: JSON.stringify(book),
       });
       if (response.ok) {
+        toast.success("Book saved successfully!");
         console.log("Book saved successfully", book);
       } else {
         console.error("Error saving book");
+        toast.error("Error saving book");
       }
     } catch (error) {
       console.error("Error running function", error);
@@ -82,9 +85,11 @@ const BookCards = () => {
       });
       if (response.ok) {
         console.log("Book deleted successfully");
+        toast.success("Book deleted successfully!");
         setUserBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookId));
       } else {
         console.error("Error deleting book");
+        toast.error("Error deleting book");
       }
     } catch (error) {
       console.error("Error deleting book from database");
@@ -93,6 +98,8 @@ const BookCards = () => {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
+      <Toaster />
+
       {/* Search Bar */}
       <form onSubmit={handleFormSubmit} className="flex gap-2 mb-6">
         <Input placeholder="Search for books" value={query} onChange={handleInputChange} />
