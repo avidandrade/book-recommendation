@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +28,7 @@ public class BookController {
         return bookService.createBooks(books);
     }
     @PostMapping("/saveBook")
-    public Book createBook(@Validated @RequestBody Book book){
+    public Book createBook(@RequestBody Book book){
         return bookService.createBook(book);
     }
     
@@ -41,11 +40,6 @@ public class BookController {
     @DeleteMapping("/books/{id}")
     public void deleteBook(@PathVariable Long id){
          bookService.deleteBook(id);
-    }
-
-    @PatchMapping("/books/{id}")
-    public Book updateBook(@PathVariable Long id, @RequestBody Book book){
-        return bookService.updateBook(id, book);
     }
 
     // @GetMapping("/searchbooks")
