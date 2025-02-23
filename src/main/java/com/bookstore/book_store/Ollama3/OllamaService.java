@@ -43,7 +43,7 @@ public class OllamaService {
     }
 
     public String getBookSummary(@RequestParam String title){
-        String prompt = "Provide a brief summary of the book titled: '" + title + "'.";
+        String prompt = "Provide a brief and concise summary of the book titled: '" + title + "'.";
 
         String response = webClient.post()
                 .uri("/api/generate")
@@ -60,7 +60,7 @@ public class OllamaService {
     }
 
     public String getBookReview(@RequestParam String title, @RequestParam int rating){
-        String prompt = "Provide a brief review of the book titled: '" + title + " and explain why it was rated " + rating + " stars.";
+        String prompt = "Summarize the opinions of other reviewers regarding the book titled: '" + title + "'. Explain the reasons behind its " + rating + " star rating, highlighting key factors that influenced the overall rating.";
 
         String response = webClient.post()
                 .uri("/api/generate")
@@ -75,8 +75,6 @@ public class OllamaService {
 
         return response;
     }
-
-    
 
     // Inner class to match JSON structure
     private static class OllamaResponse {
