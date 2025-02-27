@@ -38,7 +38,16 @@ const CardContent = React.forwardRef(({ className, ...props }, ref) => (
   <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
 ))
 CardContent.displayName = "CardContent"
-
+const CardImage = React.forwardRef(({ src, alt, className, ...props }, ref) => (
+  <img
+    ref={ref}
+    src={src}
+    alt={alt}
+    className={cn("w-full h-auto object-cover rounded-md", className)} // Adjust image size here
+    {...props}
+  />
+));
+CardImage.displayName = "CardImage";
 const CardFooter = React.forwardRef(({ className, ...props }, ref) => (
   <div
     ref={ref}
@@ -47,4 +56,4 @@ const CardFooter = React.forwardRef(({ className, ...props }, ref) => (
 ))
 CardFooter.displayName = "CardFooter"
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent, CardImage }
