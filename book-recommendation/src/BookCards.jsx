@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast, Toaster } from 'sonner';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardImage } from "@/components/ui/card";
 
 
 
@@ -109,7 +109,7 @@ const BookCards = () => {
       </form>
 
       {/* Books Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {loading ? (
           <p>Loading books...</p>
         ) : books.length === 0 ? (
@@ -122,12 +122,12 @@ const BookCards = () => {
                 <CardDescription>By {Array.isArray(book.authors) ? book.authors.join(", ") : "Unknown"}</CardDescription>
               </CardHeader>
               <CardContent>
-                <img src={book.coverImageUrl} alt="Book Cover" className="w-full h-40 object-cover rounded-md mb-2" />
+              <CardImage src={book.coverImageUrl} alt="Book Cover" className="h-30 object-contain rounded-md mb-2" />
                 <p className="text-sm text-white-600 line-clamp-6">{book.description}</p>
-                <p className="text-sm">
+                <p className="text-sm m-2">
                   <strong>Genre:</strong> {book.genre || "N/A"}
                 </p>
-                <p className="text-sm">
+                <p className="text-sm mb-2">
                   <strong>ISBN:</strong> {book.isbn || "N/A"}
                 </p>
                 <Button className="mt-2 w-full size text-sm" onClick={() => handleSaveBook(book)}>
@@ -147,7 +147,7 @@ const BookCards = () => {
       </div>
 
       {/* Display Saved Books */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
         {userBooks.length === 0 ? (
           <p>No saved books yet.</p>
         ) : (
@@ -160,14 +160,14 @@ const BookCards = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <img src={userBook.coverImageUrl} alt="Book Cover" className="w-full h-40 object-cover rounded-md mb-2" />
+                <CardImage src={userBook.coverImageUrl} alt="Book Cover" className="h-30 object-contain rounded-lg mb-2" />
                 <p className="text-sm text-white-600 line-clamp-6">
                   {userBook.description}
                 </p>
-                <p className="text-sm">
+                <p className="text-sm m-2">
                   <strong>Genre:</strong> {userBook.genre || "N/A"}
                 </p>
-                <p className="text-sm">
+                <p className="text-sm mb-2">
                   <strong>ISBN:</strong> {userBook.isbn || "N/A"}
                 </p>
                 <Button className="mt-2 w-full text-sm" onClick={() => handleDeleteBook(userBook.id)}>
