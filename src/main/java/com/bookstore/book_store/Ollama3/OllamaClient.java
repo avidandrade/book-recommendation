@@ -1,14 +1,14 @@
 package com.bookstore.book_store.Ollama3;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
 public class OllamaClient {
     
-    private WebClient webClient;
+    private final WebClient webClient;
     
     public OllamaClient( @Value("${ollama.api.url}")String ollamaApiUrl) {
         this.webClient = WebClient.builder().baseUrl(ollamaApiUrl).build();
