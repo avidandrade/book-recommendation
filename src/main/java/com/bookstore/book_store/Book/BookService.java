@@ -45,9 +45,19 @@ public class BookService {
         return fetchBooks(bookTitles);
     }
 
+    public List<Book> fetchMoreBooks(String userInput, List<String> titles) {
+        //Titles are sent so that the model avoids sending the same book.
+        List<String> bookTitles = ollamaService.getMoreBooks(userInput, titles);
+        if (bookTitles == null || bookTitles.isEmpty()) {
+            throw new RuntimeException("Ollama failed to generate a book title.");
+        }
+
+        // Fetch book details from Google Books API**
+        return fetchBooks(bookTitles);
+    }
+
     //Fetching books from API
     public List<Book> fetchBooks(List<String> bookTitles) {
-            
             List<Book> books = new ArrayList<>();
 
             for(String title : bookTitles){
@@ -102,7 +112,7 @@ public class BookService {
         }
         return null;
     }
-
+                                                                                                   
     public List<Book> getAllBooks(){ 
         return bookRepository.findAll();
     }
