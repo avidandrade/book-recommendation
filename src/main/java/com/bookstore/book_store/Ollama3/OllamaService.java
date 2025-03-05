@@ -38,4 +38,18 @@ public class OllamaService {
         return ollamaClient.callModel(prompt);
     }
 
+    public List<String> getMoreBooks(String userInput, List<String> titles) {
+
+        String prompt = "Recommend five bestselling book titles that strongly reflect the emotion: '"
+        + userInput + "'. Do not include any of the following titles: " + String.join(", ", titles) 
+        + ". Respond with a comma-separated list, with no numbering or extra text. Example: 'Book1, Book2, Book3, Book4, Book5'.";
+
+        String response = ollamaClient.callModel(prompt);
+        if(response != null){
+            return Arrays.asList(response.split("\\s*,\\s*")); 
+        }else{
+            return new ArrayList<>();
+        }
+    }
+
 }
