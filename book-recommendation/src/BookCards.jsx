@@ -17,12 +17,19 @@ const BookCards = () => {
       setLoading(true);
       const response = await fetch(`http://localhost:8080/recommend?input=${SearchQuery}`);
       const data = await response.json();
+      setQuery(SearchQuery);
       setBooks(data);
+      console.log(data);
+
     } catch (error) {
       console.error("Error fetching books from API", error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const getBookTitles = () => {
+    return books.map(book => book.title);
   };
 
   const handleInputChange = (event) => {
@@ -32,6 +39,23 @@ const BookCards = () => {
   const handleFormSubmit = (event) => {
     event.preventDefault();
     fetchBooks(query);
+  };
+
+  const handleLoadMore = async () => {
+    try {
+      const titles = getBookTitles().join(",");
+      const response = await fetch(`http://localhost:8080/moreBooks?input=${query}&titles=${titles}`);
+      const data = await response.json();
+      console.log(titles);
+        if (Array.isArray(data)) {
+          setBooks((prevBooks) => [...prevBooks, ...data]);
+        } else {
+          console.error("Error: data is not an array");
+        }
+
+    }catch(error){
+      console.error("Error fetching more books from API", error);
+    }
   };
 
   const handleSaveBook = async (book) => {
@@ -107,7 +131,7 @@ const BookCards = () => {
           {loading ? "Searching..." : "Search"}
         </Button>
       </form>
-
+       
       {/* Books Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {loading ? (
@@ -137,6 +161,12 @@ const BookCards = () => {
             </Card>
           ))
         )}
+      </div>
+
+      <div className="mt-8 flex justify-center">
+                 <Button onClick={handleLoadMore} disabled={loading}>
+                   {loading ? "Loading more..." : "Load More"}
+                 </Button>
       </div>
 
       {/* Retrieve Saved Books */}
