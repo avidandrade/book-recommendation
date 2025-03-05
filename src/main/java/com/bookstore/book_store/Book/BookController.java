@@ -1,5 +1,6 @@
 package com.bookstore.book_store.Book;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +46,12 @@ public class BookController {
     @GetMapping("/recommend")
     public List<Book> getRecommendedBooks(@RequestParam String input) {
         return bookService.fetchRecommendedBooks(input);
+    }
+
+    @GetMapping("/moreBooks")
+    public List<Book> getMoreBooks(@RequestParam String input, @RequestParam String titles) {   
+        List<String> titleList = Arrays.asList(titles.split(","));
+        return bookService.fetchMoreBooks(input,titleList);
     }
 
     @GetMapping("/testgoogleapi")
