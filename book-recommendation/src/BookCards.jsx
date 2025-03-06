@@ -11,12 +11,15 @@ const BookCards = () => {
   const [query, setQuery] = useState("");
   const [userBooks, setUserBooks] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [initialSearchDone, setInitialSearchDone] = useState(false);
+
 
   const fetchBooks = async (SearchQuery) => {
     try {
       setLoading(true);
       const response = await fetch(`http://localhost:8080/recommend?input=${SearchQuery}`);
       const data = await response.json();
+      setInitialSearchDone(true);
       setQuery(SearchQuery);
       setBooks(data);
       console.log(data);
@@ -163,11 +166,13 @@ const BookCards = () => {
         )}
       </div>
 
-      <div className="mt-8 flex justify-center">
-                 <Button onClick={handleLoadMore} disabled={loading}>
-                   {loading ? "Loading more..." : "Load More"}
-                 </Button>
-      </div>
+      {initialSearchDone && (
+        <div className="mt-8 flex justify-center">
+          <Button onClick={handleLoadMore} disabled={loading}>
+            {loading ? "Loading more..." : "Load More"}
+          </Button>
+        </div>
+      )}
 
       {/* Retrieve Saved Books */}
       <div className="mt-8">
