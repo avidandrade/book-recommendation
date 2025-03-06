@@ -41,6 +41,10 @@ const BookCards = () => {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
+    if(query.trim() == ""){
+      toast.error("Please enter a search query!");
+      return;
+    }
     fetchBooks(query);
   };
 
