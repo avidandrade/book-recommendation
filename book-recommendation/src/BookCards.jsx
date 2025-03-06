@@ -133,7 +133,7 @@ const BookCards = () => {
 
       {/* Search Bar */}
       <form onSubmit={handleFormSubmit} className="flex gap-2 mb-6">
-        <Input placeholder="Search for books" value={query} onChange={handleInputChange} />
+        <Input placeholder="Try searching for books!" value={query} onChange={handleInputChange} />
         <Button type="submit" disabled={loading}>
           {loading ? "Searching..." : "Search"}
         </Button>
