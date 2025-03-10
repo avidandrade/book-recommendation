@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { toast, Toaster } from 'sonner';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardImage } from "@/components/ui/card";
 
-
+//add skeleton for loading books.
 
 const BookCards = () => {
   const [books, setBooks] = useState([]);
@@ -75,6 +75,7 @@ const BookCards = () => {
         body: JSON.stringify(book),
       });
       if (response.ok) {
+        setUserBooks((prevuserBooks) => [...prevuserBooks, book]);
         toast.success("Book saved successfully!");
         console.log("Book saved successfully", book);
       } else {
