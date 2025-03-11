@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast, Toaster } from 'sonner';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardImage } from "@/components/ui/card";
 
@@ -142,8 +143,24 @@ const BookCards = () => {
        
       {/* Books Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {loading ? (
-          <p>Loading books...</p>
+      {loading ? (
+          Array.from({ length: 6 }).map((_, index) => (
+            <Card key={index} className="shadow-md fade-in">
+              <CardHeader>
+                <CardTitle><Skeleton width={150} /></CardTitle>
+                <CardDescription><Skeleton width={100} /></CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Skeleton height={200} />
+                <div className="text-sm text-white-600 line-clamp-6"><Skeleton count={3} /></div>
+                <div className="text-sm m-2"><Skeleton width={80} /></div>
+                <div className="text-sm mb-2"><Skeleton width={80} /></div>
+                <Button className="mt-2 w-full size text-sm" disabled>
+                  <Skeleton width={60} />
+                </Button>
+              </CardContent>
+            </Card>
+          ))
         ) : books.length === 0 ? (
           <p>No books found.</p>
         ) : (
