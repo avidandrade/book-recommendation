@@ -75,9 +75,10 @@ const BookCards = () => {
         body: JSON.stringify(book),
       });
       if (response.ok) {
-        setUserBooks((prevuserBooks) => [...prevuserBooks, book]);
+        const savedBook = await response.json();
+        setUserBooks((prevuserBooks) => [...prevuserBooks, savedBook]);
         toast.success("Book saved successfully!");
-        console.log("Book saved successfully", book);
+        console.log("Book saved successfully", savedBook);
       } else {
         console.error("Error saving book");
         toast.error("Error saving book");
@@ -113,7 +114,6 @@ const BookCards = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id: bookId }),
       });
       if (response.ok) {
         console.log("Book deleted successfully");
