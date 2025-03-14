@@ -54,10 +54,5 @@ public class BookController {
         return bookService.fetchMoreBooks(input,titleList);
     }
 
-    @GetMapping("/testgoogleapi")
-    public String testGoogleApi(String title){
-        return bookService.testGoogleApi(title);
-    }
-
 
 }
