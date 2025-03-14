@@ -137,10 +137,4 @@ public class BookService {
     public void deleteBook(Long id) {
         bookRepository.deleteById(id);
     }
-
-    public String testGoogleApi(String title){
-        RestTemplate rest = new RestTemplate();
-        String url = API_URL + "The Best of Us" + "&maxResults=" + 3;
-        return rest.getForObject(url, String.class);
-    }
 }
