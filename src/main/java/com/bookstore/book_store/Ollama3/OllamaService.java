@@ -33,7 +33,7 @@ public class OllamaService {
     }
 
     public String getBookReview(String title, int rating){
-        String prompt = "Summarize the opinions of other reviewers regarding the book titled: '" + title + "'. Explain the reasons behind its " + rating + " star rating, highlighting key factors that influenced the overall rating.";
+        String prompt = "Summarize the reviews of other reviewers regarding the book titled: '" + title + "'. Explain the reasons behind its " + rating + " star rating, highlighting key factors that influenced the overall rating.";
 
         return ollamaClient.callModel(prompt);
     }
