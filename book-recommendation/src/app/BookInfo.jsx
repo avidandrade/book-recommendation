@@ -35,7 +35,6 @@ const BookInfo = () => {
     };
 
     
-
     fetchBookInfo();
   }, [id]);
 
@@ -51,13 +50,9 @@ const BookInfo = () => {
       <h1 className="text-2xl font-bold">{book.title}</h1>
       <p className="text-lg">By {Array.isArray(book.authors) ? book.authors.join(', ') : 'Unknown'}</p>
       <img src={book.coverImageUrl} alt="Book Cover" className="h-30 object-contain rounded-md mb-2" />
+
+      <h2 className="text-xl font-bold p-2">Description</h2>
       <p className="text-sm text-white-600 line-clamp-6">{book.description}</p>
-      <p className="text-sm m-2">
-        <strong>Genre:</strong> {book.genre || 'N/A'}
-      </p>
-      <p className="text-sm mb-2">
-        <strong>ISBN:</strong> {book.isbn || 'N/A'}
-      </p>
       <div className="mt-4">
         <h2 className="text-xl font-bold">Review</h2>
         {reviewSummary ? (
