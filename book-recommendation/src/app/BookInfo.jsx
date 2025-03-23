@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 const BookInfo = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [reviewSummary, setReviewSummary] = useState([]);
@@ -34,9 +36,12 @@ const BookInfo = () => {
       }
     };
 
-    
     fetchBookInfo();
   }, [id]);
+
+  const goBack = () => {
+    navigate('/');
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -47,6 +52,7 @@ const BookInfo = () => {
   }
   return (
     <div className="p-6 max-w-4xl mx-auto">
+      <Button onClick={goBack} className="mb-4">Back</Button>
       <h1 className="text-2xl font-bold">{book.title}</h1>
       <p className="text-lg">By {Array.isArray(book.authors) ? book.authors.join(', ') : 'Unknown'}</p>
       <img src={book.coverImageUrl} alt="Book Cover" className="h-30 object-contain rounded-md mb-2" />
