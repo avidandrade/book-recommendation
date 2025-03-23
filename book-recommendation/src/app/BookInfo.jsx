@@ -51,7 +51,7 @@ const BookInfo = () => {
     return <div>Book not found</div>;
   }
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-6 max-w-4xl mx-auto shadow-md fade-in">
       <Button onClick={goBack} className="mb-4">Back</Button>
       <h1 className="text-2xl font-bold">{book.title}</h1>
       <p className="text-lg">By {Array.isArray(book.authors) ? book.authors.join(', ') : 'Unknown'}</p>
