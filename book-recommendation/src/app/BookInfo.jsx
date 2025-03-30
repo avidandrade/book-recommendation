@@ -53,25 +53,34 @@ const BookInfo = () => {
   return (
     <div className="p-6 max-w-4xl mx-auto shadow-md fade-in">
       <Button onClick={goBack} className="mb-4">Back</Button>
-      <h1 className="text-2xl font-bold">{book.title}</h1>
-      <p className="text-lg">By {Array.isArray(book.authors) ? book.authors.join(', ') : 'Unknown'}</p>
-      <img src={book.coverImageUrl} alt="Book Cover" className="h-30 object-contain rounded-md mb-2" />
-
-      <h2 className="text-xl font-bold p-2">Description</h2>
-      <p className="text-sm text-white-600 line-clamp-6">{book.description}</p>
-      <div className="mt-4">
-        <h2 className="text-xl font-bold">Review</h2>
-        {reviewSummary ? (
-          <p className="text-sm">{reviewSummary}</p>
-        ) : (
-          <p>No reviews available.</p>
-        )}
-        <h2 className="text-xl font-bold p-2">Summary</h2>
-        {summary ? (
-          <p className="text-sm">{summary}</p>
-        ) : (
-          <p>No summary available.</p>
-        )}
+      <div className="flex flex-row items-center gap-7">
+        <div className="w-1/3">
+          <h1 className="text-2xl font-bold">{book.title}</h1>
+          <p className="text-lg mt-2">By {Array.isArray(book.authors) ? book.authors.join(', ') : 'Unknown'}</p>
+          <img
+          src={book.coverImageUrl}
+          alt="Book Cover"
+          className="h-96 w-64 object-cover mt-4"
+          />
+        </div>
+      <div className="w-2/3">
+        <h2 className="text-xl font-bold p-2">Description</h2>
+        <p className="text-sm text-white-600 line-clamp-6">{book.description}</p>
+        <div className="mt-4">
+          <h2 className="text-xl font-bold">Review</h2> 
+          {reviewSummary ? (
+            <p className="text-sm">{reviewSummary}</p>
+          ) : (
+            <p>No reviews available.</p>
+          )}
+          <h2 className="text-xl font-bold p-2">Summary</h2>
+          {summary ? (
+            <p className="text-sm">{summary}</p>
+          ) : (
+            <p>No summary available.</p>
+          )}
+        </div>
+      </div>
       </div>
     </div>
   );
