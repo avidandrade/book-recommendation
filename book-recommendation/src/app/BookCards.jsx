@@ -132,12 +132,12 @@ const BookCards = () => {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <h1>Book Recommendation</h1>
+      <h1>BookWise!</h1>
       <p className='p-3'>Discover book recommendations based on your feelings!</p>
       <Toaster />
 
       {/* Search Bar */}
-      <form onSubmit={handleFormSubmit} className="flex gap-2 mb-6">
+      <form onSubmit={handleFormSubmit} className="flex gap-2 mb-6 p-4">
         <Input placeholder="Try searching for books!" value={query} onChange={handleInputChange} />
         <Button type="submit" disabled={loading}>
           {loading ? "Searching..." : "Search"}
