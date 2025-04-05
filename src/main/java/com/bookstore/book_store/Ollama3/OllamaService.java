@@ -57,5 +57,4 @@ public class OllamaService {
             return new ArrayList<>();
         }
     }
-
 }
