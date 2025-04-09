@@ -11,8 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class OllamaService {
 
-    @Autowired
+
     private OllamaClient ollamaClient;
+    
+    public OllamaService(OllamaClient ollamaClient){
+        this.ollamaClient = ollamaClient;
+    }
     
     @Cacheable("bookTitles")
     public List<String> getRecommendedBookTitle(String userInput) {
