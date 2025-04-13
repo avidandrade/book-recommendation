@@ -5,6 +5,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast, Toaster } from 'sonner';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardImage } from "@/components/ui/card";
 import {Link} from "react-router-dom";
+import { supabase } from './routes/supabaseClient';
+import { useNavigate } from "react-router-dom";
 
 //add skeleton for loading books.
 
@@ -14,7 +16,25 @@ const BookCards = () => {
   const [userBooks, setUserBooks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [initialSearchDone, setInitialSearchDone] = useState(false);
+  const navigate = useNavigate();
 
+  const handleLogout = async () => {
+    try{
+       const {error} = await supabase.auth.signOut();
+
+       if(error){
+        throw new error(error.message);
+       }
+
+       localStorage.removeItem('token');
+       navigate('/login');
+       toast.success('Logged out Successfully!');
+    }
+    catch(error){
+      console.error('Error Logging out:' + error.message);
+      toast.error('Eror Logging out. Please try again.');
+    }
+  };
 
   const fetchBooks = async (SearchQuery) => {
     try {
@@ -132,6 +152,13 @@ const BookCards = () => {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
+
+      <div className="flex justify-end mb-4">
+        <Button onClick={handleLogout} className="bg-red-500 hover:bg-red-600 text-white">
+          Logout
+        </Button>
+      </div>
+
       <h1>BookWise!</h1>
       <p className='p-3'>Discover book recommendations based on your feelings!</p>
       <Toaster />
