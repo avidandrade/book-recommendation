@@ -112,9 +112,11 @@ const BookCards = () => {
 
   const handleRetrieveBooks = async () => {
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:8080/books`, {
         method: "GET",
         headers: {
+          "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
