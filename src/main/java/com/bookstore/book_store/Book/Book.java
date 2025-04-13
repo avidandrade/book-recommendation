@@ -22,8 +22,10 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    private String userId;
 
+    private String title;
+    
     private String authors;
 
     private String genre;
@@ -114,5 +116,14 @@ public class Book {
     public void setRating(int rating) {
         this.rating = rating;
     }
+
+    public void setuserId(String userId){
+        this.userId = userId;
+    }
+
+    public String getUserId(String userId){
+        return userId;
+    }
+
     
 }

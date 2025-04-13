@@ -11,17 +11,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.bookstore.book_store.Auth0.JwtUtil;
 
 @RestController
 public class BookController {
     @Autowired
     private BookService bookService;
+    private JwtUtil jwtUtil;
+
+    public BookController(BookService bookService, JwtUtil jwtUtil){
+        this.bookService = bookService;
+        this.jwtUtil = jwtUtil;
+    }
     
     @GetMapping("/books")
-    public List<Book> getAllBooks(){
-        return bookService.getAllBooks();
+    public List<Book> getAllBooks(@RequestHeader("Authorization")String token){
+        String userId = jwtUtil.extractUserId(token);
+        return bookService.getBooksByUserId(userId);
     }
 
     @PostMapping("/saveBooks")
@@ -29,18 +39,18 @@ public class BookController {
         return bookService.createBooks(books);
     }
     @PostMapping("/saveBook")
-    public Book createBook(@RequestBody Book book){
-        return bookService.createBook(book);
+    public Book createBook(@RequestBody Book book, @RequestParam String userId){
+        return bookService.createBook(book, userId);
     }
     
     @GetMapping("/books/{id}")
-    public Optional<Book> getBookById(@PathVariable Long id){
-        return bookService.getBookById(id);
+    public Optional<Book> getBookByIdandUserId(@PathVariable Long id, String userId){
+        return bookService.getBookByIdandUserId(id,userId);
     }
     
     @DeleteMapping("/books/{id}")
-    public void deleteBook(@PathVariable Long id){
-         bookService.deleteBook(id);
+    public void deleteBook(@PathVariable Long id, @RequestParam String userId){
+         bookService.deleteBook(id,userId);
     }
 
     @GetMapping("/recommend")

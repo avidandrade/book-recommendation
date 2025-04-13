@@ -2,9 +2,7 @@ package com.bookstore.book_store.Book;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.stereotype.Service;
-
 import com.bookstore.book_store.Ollama3.OllamaService;
 import com.bookstore.book_store.s3.S3Service;
 
@@ -39,16 +37,17 @@ public class BookService {
 
         // Fetch book details from Google Books API**
         return googleService.fetchRecommendedBooks(bookTitles);
-    }                                                                                         
-    public List<Book> getAllBooks(){ 
-        return bookRepository.findAll();
+    }     
+    
+    public List<Book> getBooksByUserId(String userId){
+        return bookRepository.findByUserId(userId);
     }
 
     public List<Book> createBooks(List<Book> books) {
         return bookRepository.saveAll(books);
     }
 
-    public Book createBook(Book book){
+    public Book createBook(Book book, String userId){
         try{
             s3Service.uploadImageToS3(book.getCoverImageUrl(), book.getTitle());
         }catch(Exception e){
@@ -57,11 +56,16 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public Optional<Book> getBookById(Long id) {
-        return bookRepository.findById(id);
+    public Optional<Book> getBookByIdandUserId(Long id, String userId) {
+        return bookRepository.findByIdAndUserId(id,userId);
     }
 
-    public void deleteBook(Long id) {
-        bookRepository.deleteById(id);
+    public void deleteBook(Long id, String userId) {
+        Optional<Book> book = bookRepository.findByIdAndUserId(id, userId);
+        if(book.isPresent()){
+            bookRepository.delete(book.get());
+        }else{
+            throw new RuntimeException("Book was not found.");
+        }
     }
 }
