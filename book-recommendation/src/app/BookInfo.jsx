@@ -40,7 +40,7 @@ const BookInfo = () => {
   }, [id]);
 
   const goBack = () => {
-    navigate('/');
+    navigate('/books');
   };
 
   if (loading) {
