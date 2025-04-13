@@ -2,7 +2,9 @@ package com.bookstore.book_store.Book;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.stereotype.Service;
+
 import com.bookstore.book_store.Ollama3.OllamaService;
 import com.bookstore.book_store.s3.S3Service;
 
@@ -10,10 +12,10 @@ import com.bookstore.book_store.s3.S3Service;
 @Service
 public class BookService {
 
-    private BookRepository bookRepository;
-    private OllamaService ollamaService;
-    private S3Service s3Service;
-    private GoogleService googleService;
+    private final BookRepository bookRepository;
+    private final OllamaService ollamaService;
+    private final S3Service s3Service;
+    private final GoogleService googleService;
 
     public BookService(BookRepository bookRepository, OllamaService ollamaService,S3Service s3Service,GoogleService googleService){
         this.bookRepository = bookRepository;

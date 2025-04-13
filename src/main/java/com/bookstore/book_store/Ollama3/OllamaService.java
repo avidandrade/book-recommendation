@@ -3,6 +3,7 @@ package com.bookstore.book_store.Ollama3;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class OllamaService {
 
 
-    private OllamaClient ollamaClient;
+    private final OllamaClient ollamaClient;
 
     public OllamaService(OllamaClient ollamaClient){
         this.ollamaClient = ollamaClient;
