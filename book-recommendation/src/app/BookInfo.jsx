@@ -13,7 +13,13 @@ const BookInfo = () => {
   useEffect(() => {
     const fetchBookInfo = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/books/${id}`);
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:8080/books/${id}`,{
+          headers:{
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          }
+        });
         const data = await response.json();
         setBook(data);
 

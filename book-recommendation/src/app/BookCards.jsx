@@ -39,7 +39,14 @@ const BookCards = () => {
   const fetchBooks = async (SearchQuery) => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:8080/recommend?input=${SearchQuery}`);
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:8080/recommend?input=${SearchQuery}`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
       const data = await response.json();
       setInitialSearchDone(true);
       setQuery(SearchQuery);
@@ -89,9 +96,11 @@ const BookCards = () => {
 
   const handleSaveBook = async (book) => {
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:8080/saveBook`, {
         method: "POST",
         headers: {
+          "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(book),
