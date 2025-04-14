@@ -79,8 +79,14 @@ const BookCards = () => {
 
   const handleLoadMore = async () => {
     try {
+      const token = localStorage.getItem('token');
       const titles = getBookTitles().join(",");
-      const response = await fetch(`http://localhost:8080/moreBooks?input=${query}&titles=${titles}`);
+      const response = await fetch(`http://localhost:8080/moreBooks?input=${query}&titles=${titles}`,{
+        headers:{
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
       const data = await response.json();
       console.log(titles);
         if (Array.isArray(data)) {
@@ -142,9 +148,11 @@ const BookCards = () => {
 
   const handleDeleteBook = async (bookId) => {
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:8080/books/${bookId}`, {
         method: "DELETE",
         headers: {
+          "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
