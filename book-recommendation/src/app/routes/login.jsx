@@ -27,7 +27,6 @@ export default function Login({onLogin}) {
     const password = formData.get('password');
 
     try {
-      // Use Supabase to log in
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
