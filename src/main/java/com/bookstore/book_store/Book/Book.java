@@ -42,7 +42,7 @@ public class Book {
         
     }
 
-    public Book(String title, String authors, String genre, String description, String isbn, String coverImageUrl, int rating) {
+    public Book(String title, String authors, String genre, String description, String isbn, String coverImageUrl, int rating, String userId) {
         this.title = title;
         this.authors = authors;
         this.genre = genre;
@@ -50,6 +50,7 @@ public class Book {
         this.isbn = isbn;
         this.coverImageUrl = coverImageUrl;
         this.rating = rating;
+        this.userId = userId;
     }
 
     public String getTitle() {

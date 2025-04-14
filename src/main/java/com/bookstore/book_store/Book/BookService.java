@@ -2,7 +2,9 @@ package com.bookstore.book_store.Book;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.stereotype.Service;
+
 import com.bookstore.book_store.Ollama3.OllamaService;
 import com.bookstore.book_store.s3.S3Service;
 
@@ -22,10 +24,10 @@ public class BookService {
         this.googleService = googleService;
     }
 
-    public List<Book> fetchRecommendedBooks(String userInput) {
+    public List<Book> fetchRecommendedBooks(String userInput, String userId) {
         //Get a book title from Ollama AI
         List<String> bookTitles = ollamaService.getRecommendedBookTitle(userInput);
-        return googleService.fetchRecommendedBooks(bookTitles);
+        return googleService.fetchRecommendedBooks(bookTitles,userId);
     }
 
     public List<Book> fetchMoreBooks(String userInput, List<String> titles) {
@@ -36,7 +38,8 @@ public class BookService {
         }
 
         // Fetch book details from Google Books API**
-        return googleService.fetchRecommendedBooks(bookTitles);
+        // return googleService.fetchRecommendedBooks(bookTitles);
+        return null;
     }     
     
     public List<Book> getBooksByUserId(String userId){
@@ -50,6 +53,7 @@ public class BookService {
     public Book createBook(Book book, String userId){
         try{
             s3Service.uploadImageToS3(book.getCoverImageUrl(), book.getTitle());
+            book.setuserId(userId);
         }catch(Exception e){
             System.out.println("Error uploading image to S3");
         }
