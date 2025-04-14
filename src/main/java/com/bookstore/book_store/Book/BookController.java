@@ -20,8 +20,8 @@ import com.bookstore.book_store.Auth0.JwtUtil;
 @RestController
 public class BookController {
     @Autowired
-    private BookService bookService;
-    private JwtUtil jwtUtil;
+    private final BookService bookService;
+    private final JwtUtil jwtUtil;
 
     public BookController(BookService bookService, JwtUtil jwtUtil){
         this.bookService = bookService;
@@ -39,12 +39,15 @@ public class BookController {
         return bookService.createBooks(books);
     }
     @PostMapping("/saveBook")
-    public Book createBook(@RequestBody Book book, @RequestParam String userId){
+    public Book createBook(@RequestBody Book book, @RequestHeader("Authorization") String token){
+        String userId = jwtUtil.extractUserId(token);
+        System.out.println("Extracted userId: " + userId); 
         return bookService.createBook(book, userId);
     }
     
     @GetMapping("/books/{id}")
-    public Optional<Book> getBookByIdandUserId(@PathVariable Long id, String userId){
+    public Optional<Book> getBookByIdandUserId(@PathVariable Long id, @RequestHeader("Authorization") String token){
+        String userId = jwtUtil.extractUserId(token);
         return bookService.getBookByIdandUserId(id,userId);
     }
     
@@ -54,8 +57,9 @@ public class BookController {
     }
 
     @GetMapping("/recommend")
-    public List<Book> getRecommendedBooks(@RequestParam String input) {
-        return bookService.fetchRecommendedBooks(input);
+    public List<Book> getRecommendedBooks(@RequestHeader("Authorization") String token, @RequestParam String input) {
+        String userId = jwtUtil.extractUserId(token);
+        return bookService.fetchRecommendedBooks(userId, input);
     }
 
     @GetMapping("/moreBooks")
