@@ -18,7 +18,7 @@ public class GoogleService {
     private final ObjectMapper mapper = new ObjectMapper();
     
     
-    public List<Book> fetchRecommendedBooks (List<String> bookTitles){
+    public List<Book> fetchRecommendedBooks (List<String> bookTitles, String userId){
         if(bookTitles == null || bookTitles.isEmpty()){
             throw new RuntimeException("Ollama failed to generate book titles!");
         }
@@ -26,13 +26,13 @@ public class GoogleService {
         for(String title : bookTitles){
             String url = APL_Url + title + "&maxResults=" + maxResults;
             String response = restTemplate.getForObject(url,String.class);
-            books.add(parseResponse(response));
+            books.add(parseResponse(response,userId));
         }
 
         return books;
     }
 
-    public Book parseResponse(String response){
+    public Book parseResponse(String response, String userId){
         try{
             JsonNode root = mapper.readTree(response);
             JsonNode items = root.path("items");
@@ -67,7 +67,7 @@ public class GoogleService {
                         coverImageUrl = imageLinks.path("thumbnail").asText();
                     }
 
-                    return new Book(title, authors, genre,description, isbn, coverImageUrl, rating);
+                    return new Book(title, authors, genre,description, isbn, coverImageUrl, rating,userId);
                 }       
             }
         }catch(IOException e){
