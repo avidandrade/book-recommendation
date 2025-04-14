@@ -1,12 +1,13 @@
 package com.bookstore.book_store.Auth0;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import java.security.Key;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import java.security.Key;
 
 @Component
 public class JwtUtil {
@@ -24,6 +25,6 @@ public class JwtUtil {
                 .parseClaimsJws(token.replace("Bearer ", "")) // Parse the token
                 .getBody();
 
-        return claims.getSubject(); // The "sub" claim contains the Supabase UID
+        return claims.getSubject(); 
     }
 }
