@@ -63,6 +63,10 @@ public class BookService {
         return bookRepository.findByIdAndUserId(id,userId);
     }
 
+    public Optional<Book> getBookByIsbn(String isbn){
+        return bookRepository.findByIsbn(isbn);
+    }
+
     public void deleteBook(Long id, String userId) {
         Optional<Book> book = bookRepository.findByIdAndUserId(id, userId);
         if(book.isPresent()){
