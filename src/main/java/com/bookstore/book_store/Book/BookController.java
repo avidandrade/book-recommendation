@@ -49,9 +49,9 @@ public class BookController {
         return bookService.createBook(book, userId);
     }
     
-    @GetMapping("/books/{id}")
-    public Optional<Book> getBookByIdandUserId(@PathVariable Long id){
-        return bookService.getBookByIdandUserId(id,userId);
+    @GetMapping("/books/{isbn}")
+    public Optional<Book> getBookByIsbn(@PathVariable String isbn){
+        return bookService.getBookByIsbn(isbn);
     }
     
     @DeleteMapping("/books/{id}")
