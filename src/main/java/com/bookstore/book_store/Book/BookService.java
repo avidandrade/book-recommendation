@@ -30,7 +30,7 @@ public class BookService {
         return googleService.fetchRecommendedBooks(bookTitles,userId);
     }
 
-    public List<Book> fetchMoreBooks(String userInput, List<String> titles) {
+    public List<Book> fetchMoreBooks(String userInput, List<String> titles, String userId) {
         //Titles are sent so that the model avoids sending the same book.
         List<String> bookTitles = ollamaService.getMoreBooks(userInput, titles);
         if (bookTitles == null || bookTitles.isEmpty()) {
@@ -38,8 +38,7 @@ public class BookService {
         }
 
         // Fetch book details from Google Books API**
-        // return googleService.fetchRecommendedBooks(bookTitles);
-        return null;
+        return googleService.fetchRecommendedBooks(bookTitles,userId);
     }     
     
     public List<Book> getBooksByUserId(String userId){
