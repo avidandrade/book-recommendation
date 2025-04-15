@@ -24,7 +24,7 @@ function App() {
         <Route path="/sign-up" element={<SignUp/>}/>
         <Route path="/forgot-password" element={<ForgotPassword/>}/>
         <Route path="/books" element={isAuthenticated ? <BookCards /> : <Navigate to="/login"/>}/>
-        <Route path="/books/:id" element={isAuthenticated ? <BookInfo/> : <Navigate to="/login"/>} />
+        <Route path="/books/:isbn" element={isAuthenticated ? <BookInfo/> : <Navigate to="/login"/>} />
       </Routes>
     </Router>
   )

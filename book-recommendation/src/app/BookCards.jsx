@@ -281,7 +281,7 @@ const BookCards = () => {
                 <p className="text-sm mb-2">
                   <strong>ISBN:</strong> {userBook.isbn || "N/A"}
                 </p>
-                <Link to={`/books/${userBook.id}`}>
+                <Link to={`/books/${userBook.isbn}`}>
                   <Button className="mt-2 w-full size text-sm">
                     View Details
                   </Button>

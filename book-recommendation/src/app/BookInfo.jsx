@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
 const BookInfo = () => {
-  const { id } = useParams();
+  const { isbn } = useParams();
   const navigate = useNavigate();
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -14,7 +14,7 @@ const BookInfo = () => {
     const fetchBookInfo = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:8080/books/${id}`,{
+        const response = await fetch(`http://localhost:8080/books/${isbn}`,{
           headers:{
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -43,7 +43,7 @@ const BookInfo = () => {
     };
 
     fetchBookInfo();
-  }, [id]);
+  }, [isbn]);
 
   const goBack = () => {
     navigate('/books');
