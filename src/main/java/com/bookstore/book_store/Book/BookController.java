@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,15 +23,20 @@ public class BookController {
     @Autowired
     private final BookService bookService;
     private final JwtUtil jwtUtil;
+    private String userId;
 
     public BookController(BookService bookService, JwtUtil jwtUtil){
         this.bookService = bookService;
         this.jwtUtil = jwtUtil;
     }
+
+    @ModelAttribute
+    public void extractUserId(@RequestHeader("Authorization") String token){
+        this.userId = jwtUtil.extractUserId(token);
+    }
     
     @GetMapping("/books")
-    public List<Book> getAllBooks(@RequestHeader("Authorization")String token){
-        String userId = jwtUtil.extractUserId(token);
+    public List<Book> getAllBooks(){
         return bookService.getBooksByUserId(userId);
     }
 
@@ -39,33 +45,29 @@ public class BookController {
         return bookService.createBooks(books);
     }
     @PostMapping("/saveBook")
-    public Book createBook(@RequestBody Book book, @RequestHeader("Authorization") String token){
-        String userId = jwtUtil.extractUserId(token);
-        System.out.println("Extracted userId: " + userId); 
+    public Book createBook(@RequestBody Book book){
         return bookService.createBook(book, userId);
     }
     
     @GetMapping("/books/{id}")
-    public Optional<Book> getBookByIdandUserId(@PathVariable Long id, @RequestHeader("Authorization") String token){
-        String userId = jwtUtil.extractUserId(token);
+    public Optional<Book> getBookByIdandUserId(@PathVariable Long id){
         return bookService.getBookByIdandUserId(id,userId);
     }
     
     @DeleteMapping("/books/{id}")
-    public void deleteBook(@PathVariable Long id, @RequestParam String userId){
+    public void deleteBook(@PathVariable Long id){
          bookService.deleteBook(id,userId);
     }
 
     @GetMapping("/recommend")
-    public List<Book> getRecommendedBooks(@RequestHeader("Authorization") String token, @RequestParam String input) {
-        String userId = jwtUtil.extractUserId(token);
+    public List<Book> getRecommendedBooks(@RequestParam String input) {
         return bookService.fetchRecommendedBooks(userId, input);
     }
 
     @GetMapping("/moreBooks")
-    public List<Book> getMoreBooks(@RequestParam String input, @RequestParam String titles) {   
+    public List<Book> getMoreBooks(@RequestParam String input, @RequestParam String titles) {
         List<String> titleList = Arrays.asList(titles.split(","));
-        return bookService.fetchMoreBooks(input,titleList);
+        return bookService.fetchMoreBooks(input,titleList, userId);
     }
 
 
