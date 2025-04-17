@@ -17,7 +17,7 @@ public class OllamaService {
         this.ollamaClient = ollamaClient;
     }
     
-    @Cacheable("bookTitles")
+    
     public List<String> getRecommendedBookTitle(String userInput) {
 
         String prompt = "Recommend five bestselling book titles that strongly reflect the emotion: '"
@@ -31,14 +31,14 @@ public class OllamaService {
         }
     }
 
-    @Cacheable("bookSummary")
+    
     public String getBookSummary(String title){
         String prompt = "Provide a brief and concise summary of the book titled: '" + title + "'.";
 
         return ollamaClient.callModel(prompt);
     }
 
-    @Cacheable("bookReview")
+
     public String getBookReview(String title, int rating){
         String prompt = "Summarize the opinions of other reviewers regarding the book titled: '" + title + "'. Explain the reasons behind its " + rating + " star rating, highlighting key factors that influenced the overall rating in one short paragraph.";
 
@@ -46,7 +46,7 @@ public class OllamaService {
         return ollamaClient.callModel(prompt);
     }
     
-    @Cacheable("moreBooks")
+
     public List<String> getMoreBooks(String userInput, List<String> titles) {
 
         String prompt = "Recommend five bestselling book titles that strongly reflect the emotion: '"
