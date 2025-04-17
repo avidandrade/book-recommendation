@@ -61,7 +61,7 @@ public class BookController {
 
     @GetMapping("/recommend")
     public List<Book> getRecommendedBooks(@RequestParam String input) {
-        return bookService.fetchRecommendedBooks(userId, input);
+        return bookService.fetchRecommendedBooks(input,userId);
     }
 
     @GetMapping("/moreBooks")
