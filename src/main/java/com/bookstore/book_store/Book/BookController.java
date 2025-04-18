@@ -50,8 +50,8 @@ public class BookController {
     }
     
     @GetMapping("/books/{isbn}")
-    public Optional<Book> getBookByIsbn(@PathVariable String isbn){
-        return bookService.getBookByIsbn(isbn);
+    public Book getBookByIsbn(@PathVariable String isbn){
+        return bookService.getBookByIsbnAndUserId(isbn,userId);
     }
     
     @DeleteMapping("/books/{id}")
