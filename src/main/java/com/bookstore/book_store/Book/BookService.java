@@ -63,8 +63,8 @@ public class BookService {
         return bookRepository.findByIdAndUserId(id,userId);
     }
 
-    public Optional<Book> getBookByIsbn(String isbn){
-        return bookRepository.findByIsbn(isbn);
+    public Book getBookByIsbnAndUserId(String isbn, String userId){
+        return googleService.fetchBookData(isbn,userId);
     }
 
     public void deleteBook(Long id, String userId) {
