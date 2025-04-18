@@ -17,7 +17,7 @@ public class OllamaService {
         this.ollamaClient = ollamaClient;
     }
     
-    
+
     public List<String> getRecommendedBookTitle(String userInput) {
 
         String prompt = "Recommend five bestselling book titles that strongly reflect the emotion: '"
@@ -41,9 +41,9 @@ public class OllamaService {
 
     public String getBookReview(String title, int rating){
         String prompt = "Summarize the opinions of other reviewers regarding the book titled: '" + title + "'. Explain the reasons behind its " + rating + " star rating, highlighting key factors that influenced the overall rating in one short paragraph.";
-
-
-        return ollamaClient.callModel(prompt);
+        String response = ollamaClient.callModel(prompt);
+        System.out.println(response);
+        return response;
     }
     
 

@@ -3,10 +3,8 @@ package com.bookstore.book_store.Book;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -32,6 +30,12 @@ public class GoogleService {
         return books;
     }
 
+    public Book fetchBookData(String isbn, String userId){
+        String url = APL_Url + "isbn:" + isbn;
+        String response = restTemplate.getForObject(url, String.class);
+        
+        return parseResponse(response, userId);
+    }
     public Book parseResponse(String response, String userId){
         try{
             JsonNode root = mapper.readTree(response);
