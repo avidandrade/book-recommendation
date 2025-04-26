@@ -9,12 +9,35 @@ import ForgotPassword from './routes/forgot-password.jsx';
 import './App.css'
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    setIsAuthenticated(!!token);
+    const checkAuth = async() => {
+      try{
+        const response = await fetch(`http://localhost:8080/auth/validate`, {
+          method: 'GET',
+          credentials: 'include',
+        });
+
+        if(response.ok){
+          setIsAuthenticated(true);
+        }else{
+          setIsAuthenticated(false);
+        }
+      }catch(error){
+        console.error('Error validating authentication:', error);
+        setIsAuthenticated(false);
+      }finally{
+        setIsLoading(false);
+      }
+    };
+    checkAuth();
   }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Router>
