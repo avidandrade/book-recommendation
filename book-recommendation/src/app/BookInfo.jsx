@@ -6,20 +6,25 @@ const BookInfo = () => {
   const { isbn } = useParams();
   const navigate = useNavigate();
   const [book, setBook] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isloading, setLoading] = useState(true);
   const [reviewSummary, setReviewSummary] = useState([]);
   const [summary, setSummary] = useState([]);
 
   useEffect(() => {
     const fetchBookInfo = async () => {
       try {
-        const token = localStorage.getItem('token');
+
         const response = await fetch(`http://localhost:8080/books/${isbn}`,{
           headers:{
-            "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
-          }
+          },
+          credentials: 'include',
         });
+
+        if(!response.ok){
+          throw new error('Failed to fetch book details');
+        }
+        
         const data = await response.json();
         setBook(data);
 
@@ -32,6 +37,8 @@ const BookInfo = () => {
           const reviewText = await reviewResponse.text();
           const summaryText = await summary.text();
 
+          console.log("Review "+ reviewText);
+          console.log("Summary " + summaryText);
           setReviewSummary(reviewText);
           setSummary(summaryText);
         }
@@ -49,7 +56,7 @@ const BookInfo = () => {
     navigate('/books');
   };
 
-  if (loading) {
+  if (isloading) {
     return <div>Loading...</div>;
   }
 

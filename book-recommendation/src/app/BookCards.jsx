@@ -5,10 +5,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast, Toaster } from 'sonner';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardImage } from "@/components/ui/card";
 import {Link} from "react-router-dom";
-import { supabase } from './routes/supabaseClient';
 import { useNavigate } from "react-router-dom";
-
-//add skeleton for loading books.
+import { supabase } from './routes/supabaseClient';
 
 const BookCards = () => {
   const [books, setBooks] = useState([]);
@@ -20,13 +18,11 @@ const BookCards = () => {
 
   const handleLogout = async () => {
     try{
-       const {error} = await supabase.auth.signOut();
-
-       if(error){
-        throw new error(error.message);
-       }
-
-       localStorage.removeItem('token');
+      await supabase.auth.signOut();
+      const response = await fetch(`http://localhost:8080/auth/logout`,{
+        method: "POST",
+        credentials: 'include',
+      });
        navigate('/login');
        toast.success('Logged out Successfully!');
     }
@@ -39,19 +35,14 @@ const BookCards = () => {
   const fetchBooks = async (SearchQuery) => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:8080/recommend?input=${SearchQuery}`, {
         method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
+        credentials: 'include',
       });
       const data = await response.json();
       setInitialSearchDone(true);
       setQuery(SearchQuery);
       setBooks(data);
-      console.log(data);
 
     } catch (error) {
       console.error("Error fetching books from API", error);
@@ -79,13 +70,9 @@ const BookCards = () => {
 
   const handleLoadMore = async () => {
     try {
-      const token = localStorage.getItem('token');
       const titles = getBookTitles().join(",");
       const response = await fetch(`http://localhost:8080/moreBooks?input=${query}&titles=${titles}`,{
-        headers:{
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
+        credentials: 'include',
       });
       const data = await response.json();
       console.log(titles);
@@ -102,13 +89,12 @@ const BookCards = () => {
 
   const handleSaveBook = async (book) => {
     try {
-      const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:8080/saveBook`, {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
+          "Content-Type" : "application/json",
         },
+        credentials: 'include',
         body: JSON.stringify(book),
       });
       if (response.ok) {
@@ -127,13 +113,9 @@ const BookCards = () => {
 
   const handleRetrieveBooks = async () => {
     try {
-      const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:8080/books`, {
         method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+        credentials: 'include',
       });
       if (response.ok) {
         const data = await response.json();
@@ -148,13 +130,9 @@ const BookCards = () => {
 
   const handleDeleteBook = async (bookId) => {
     try {
-      const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:8080/books/${bookId}`, {
         method: "DELETE",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+        credentials: 'include',
       });
       if (response.ok) {
         console.log("Book deleted successfully");

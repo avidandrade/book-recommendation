@@ -35,7 +35,19 @@ export default function Login({onLogin}) {
       if (error) {
         throw new Error(error.message);
       }
-      localStorage.setItem('token', data.session.access_token);
+
+      const response = await fetch(`http://localhost:8080/auth/set-cookie`, {
+        method:'POST',
+        headers: {
+          'Content-Type' : 'application/json',
+        },
+        credentials:'include',
+        body: JSON.stringify({token: data.session.access_token}),
+      });
+
+      if(!response.ok){
+        throw new Error ('Failed to set authentication cookie');
+      }
 
       onLogin();
       navigate('/books');
