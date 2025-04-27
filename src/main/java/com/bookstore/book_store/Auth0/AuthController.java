@@ -31,6 +31,7 @@ public class AuthController {
         return Keys.hmacShaKeyFor(secret.getBytes()); // Convert secret to a Key object
     }
     
+    //Creates cookie and sends to browswer
     @PostMapping("/auth/set-cookie")
     public ResponseEntity<?> setCookie(@RequestBody Map<String,String> body, HttpServletResponse response){
         String token = body.get("token");
@@ -47,6 +48,7 @@ public class AuthController {
         return ResponseEntity.ok("Cookie set successfully");
     }
 
+    //Creates cookie to overwrite the existing one holding token and sends to browswer
     @PostMapping("/auth/logout")
     public ResponseEntity<?> logout(HttpServletResponse response){
         ResponseCookie cookie =  ResponseCookie.from("authToken","")
@@ -61,6 +63,7 @@ public class AuthController {
         return ResponseEntity.ok("Cleared Cookie!");
     }
     
+    //Validates token
     @GetMapping("/auth/validate")
     public ResponseEntity<?> validateAuth(@CookieValue(value = "authToken", required = false) String token) {
         if (token == null || token.isEmpty()) {
