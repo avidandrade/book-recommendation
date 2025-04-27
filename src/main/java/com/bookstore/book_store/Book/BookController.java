@@ -3,7 +3,6 @@ package com.bookstore.book_store.Book;
 import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,7 +18,6 @@ import com.bookstore.book_store.Auth0.JwtUtil;
 
 @RestController
 public class BookController {
-    @Autowired
     private final BookService bookService;
     private final JwtUtil jwtUtil;
     private String userId;
