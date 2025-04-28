@@ -7,14 +7,23 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardImage } 
 import {Link} from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { supabase } from './routes/supabaseClient';
+import { useBooks } from "./BookCalls";
 
 const BookCards = () => {
-  const [books, setBooks] = useState([]);
   const [query, setQuery] = useState("");
-  const [userBooks, setUserBooks] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [initialSearchDone, setInitialSearchDone] = useState(false);
   const navigate = useNavigate();
+
+  const{
+    books,
+    userBooks,
+    fetchBooks,
+    handleDeleteBook,
+    fetchLoadMore,
+    handleRetrieveBooks,
+    handleSaveBook,
+    loading,
+  } = useBooks();
 
   const handleLogout = async () => {
     try{
@@ -23,8 +32,11 @@ const BookCards = () => {
         method: "POST",
         credentials: 'include',
       });
-       navigate('/login');
-       toast.success('Logged out Successfully!');
+
+      if(response.ok){
+        navigate('/login');
+        toast.success('Logged out Successfully!');
+      }
     }
     catch(error){
       console.error('Error Logging out:' + error.message);
@@ -32,27 +44,9 @@ const BookCards = () => {
     }
   };
 
-  const fetchBooks = async (SearchQuery) => {
-    try {
-      setLoading(true);
-      const response = await fetch(`http://localhost:8080/recommend?input=${SearchQuery}`, {
-        method: "GET",
-        credentials: 'include',
-      });
-      const data = await response.json();
-      setInitialSearchDone(true);
-      setQuery(SearchQuery);
-      setBooks(data);
-
-    } catch (error) {
-      console.error("Error fetching books from API", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getBookTitles = () => {
-    return books.map(book => book.title);
+  const handleLoadMore = () => {
+    const titles = books.map((book) => book.title).join(",");
+    fetchLoadMore(query, titles);
   };
 
   const handleInputChange = (event) => {
@@ -66,85 +60,7 @@ const BookCards = () => {
       return;
     }
     fetchBooks(query);
-  };
-
-  const handleLoadMore = async () => {
-    try {
-      const titles = getBookTitles().join(",");
-      const response = await fetch(`http://localhost:8080/moreBooks?input=${query}&titles=${titles}`,{
-        credentials: 'include',
-      });
-      const data = await response.json();
-      console.log(titles);
-        if (Array.isArray(data)) {
-          setBooks((prevBooks) => [...prevBooks, ...data]);
-        } else {
-          console.error("Error: data is not an array");
-        }
-
-    }catch(error){
-      console.error("Error fetching more books from API", error);
-    }
-  };
-
-  const handleSaveBook = async (book) => {
-    try {
-      const response = await fetch(`http://localhost:8080/saveBook`, {
-        method: "POST",
-        headers: {
-          "Content-Type" : "application/json",
-        },
-        credentials: 'include',
-        body: JSON.stringify(book),
-      });
-      if (response.ok) {
-        const savedBook = await response.json();
-        setUserBooks((prevuserBooks) => [...prevuserBooks, savedBook]);
-        toast.success("Book saved successfully!");
-        console.log("Book saved successfully", savedBook);
-      } else {
-        console.error("Error saving book");
-        toast.error("Error saving book");
-      }
-    } catch (error) {
-      console.error("Error running function", error);
-    }
-  };
-
-  const handleRetrieveBooks = async () => {
-    try {
-      const response = await fetch(`http://localhost:8080/books`, {
-        method: "GET",
-        credentials: 'include',
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setUserBooks(data);
-      } else {
-        console.error("Error retrieving books");
-      }
-    } catch (error) {
-      console.error("Error retrieving books from database");
-    }
-  };
-
-  const handleDeleteBook = async (bookId) => {
-    try {
-      const response = await fetch(`http://localhost:8080/books/${bookId}`, {
-        method: "DELETE",
-        credentials: 'include',
-      });
-      if (response.ok) {
-        console.log("Book deleted successfully");
-        toast.success("Book deleted successfully!");
-        setUserBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookId));
-      } else {
-        console.error("Error deleting book");
-        toast.error("Error deleting book");
-      }
-    } catch (error) {
-      console.error("Error deleting book from database");
-    }
+    setInitialSearchDone(true);
   };
 
   return (
@@ -191,6 +107,7 @@ const BookCards = () => {
         ) : books.length === 0 ? (
           <p>No books found.</p>
         ) : (
+          Array.isArray(books) &&
           books.map((book) => (
             <Card key={book.id || book.isbn || book.title} className="shadow-md fade-in">
               <CardHeader>
