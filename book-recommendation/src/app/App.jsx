@@ -14,23 +14,15 @@ function App() {
 
   useEffect(() => {
     const checkAuth = async() => {
-      try{
-        const response = await fetch(`http://localhost:8080/auth/validate`, {
-          method: 'GET',
-          credentials: 'include',
-        });
+      const cookies = document.cookie.split(';').map(cookie => cookie.trim());
+      const authToken = cookies.find(cookie => cookie.startsWith('authToken='));
 
-        if(response.ok){
-          setIsAuthenticated(true);
-        }else{
-          setIsAuthenticated(false);
-        }
-      }catch(error){
-        console.error('Error validating authentication:', error);
+      if(authToken){
+        setIsAuthenticated(true);
+      }else{
         setIsAuthenticated(false);
-      }finally{
-        setIsLoading(false);
       }
+      setIsLoading(false);
     };
     checkAuth();
   }, []);
