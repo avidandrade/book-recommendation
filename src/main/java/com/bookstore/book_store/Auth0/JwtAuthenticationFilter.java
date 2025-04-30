@@ -1,12 +1,9 @@
-
+package com.bookstore.book_store.Auth0;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import com.bookstore.book_store.Auth0.JwtUtil;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -24,6 +21,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
     public JwtAuthenticationFilter(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
+    
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getRequestURI();
+        // Exclude /auth/set-cookie from the filter
+        return path.equals("/auth/set-cookie");
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -39,7 +43,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                 }
             }
         }
-
+        
+        System.out.println("Cookie  " + authToken);
         if(authToken != null){
             try{
                 Claims claims = jwtUtil.validateToken(authToken);
@@ -52,8 +57,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 
 
             }catch(Exception e){
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Invalid or expired token\"}");
+                return;
             }
         }
 

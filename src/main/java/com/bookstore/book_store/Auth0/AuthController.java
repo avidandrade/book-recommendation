@@ -22,14 +22,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class AuthController {
-    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Value("${jwt.secret}")
     private String secret;
-
-    private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes()); // Convert secret to a Key object
-    }
     
     //Creates cookie and sends to browswer
     @PostMapping("/auth/set-cookie")
@@ -55,7 +50,6 @@ public class AuthController {
         .httpOnly(true)
         .secure(!"development".equals(System.getenv("ENV")))
         .sameSite("Strict")
-        .path("/")
         .maxAge(0)
         .build();
 
@@ -63,25 +57,4 @@ public class AuthController {
         return ResponseEntity.ok("Cleared Cookie!");
     }
     
-    //Validates token
-    @GetMapping("/auth/validate")
-    public ResponseEntity<?> validateAuth(@CookieValue(value = "authToken", required = false) String token) {
-        if (token == null || token.isEmpty()) {
-            logger.warn("No authToken cookie found");
-            return ResponseEntity.status(401).body("Unauthorized");
-        }
-
-        try {
-            Claims claims = Jwts.parserBuilder()
-                .setSigningKey(getSigningKey()) 
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-            logger.info("Token is valid for user: {}", claims.getSubject());
-            return ResponseEntity.ok().body("Token is valid");
-        } catch (Exception e) {
-            logger.error("Invalid token: {}", e.getMessage());
-            return ResponseEntity.status(401).body("Invalid token");
-        }
-    }
 }
