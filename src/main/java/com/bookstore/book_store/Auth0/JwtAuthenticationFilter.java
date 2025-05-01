@@ -21,12 +21,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
     public JwtAuthenticationFilter(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
-    
+
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
-        // Exclude /auth/set-cookie from the filter
-        return path.equals("/auth/set-cookie");
+        // Exclude /auth/set-cookie and /auth/logout from the filter
+        return path.equals("/auth/set-cookie") || path.equals("/auth/logout");
     }
 
     @Override
@@ -39,12 +39,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             for(Cookie cookie : request.getCookies()){
                 if("authToken".equals(cookie.getName())){
                     authToken = cookie.getValue();
-                    break;
                 }
             }
         }
-        
-        System.out.println("Cookie  " + authToken);
+    
         if(authToken != null){
             try{
                 Claims claims = jwtUtil.validateToken(authToken);
@@ -54,7 +52,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                             new UsernamePasswordAuthenticationToken(userId, null, new ArrayList<>());
                 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-
 
             }catch(Exception e){
                 response.setContentType("application/json");
