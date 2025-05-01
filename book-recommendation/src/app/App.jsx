@@ -13,17 +13,34 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const checkAuth = async() => {
-      const cookies = document.cookie.split(';').map(cookie => cookie.trim());
-      const authToken = cookies.find(cookie => cookie.startsWith('authToken='));
-
-      if(authToken){
-        setIsAuthenticated(true);
-      }else{
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/auth/verify', {
+          method: 'GET',
+          credentials: 'include',
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          if (data.authenticated) {
+            setIsAuthenticated(true);
+            console.log("Persisted");
+          } else {
+            setIsAuthenticated(false);
+            console.log("Not Persisted");
+          }
+        } else {
+          setIsAuthenticated(false);
+          console.log("Not Persisted");
+        }
+      } catch (error) {
+        console.error("Error verifying authentication:", error);
         setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
+  
     checkAuth();
   }, []);
 
