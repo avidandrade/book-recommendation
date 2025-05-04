@@ -2,7 +2,6 @@ package com.bookstore.book_store.Auth0;
 
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -14,15 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class AuthController {
-
-    @Value("${jwt.secret}")
-    private String secret;
     
     private final JwtUtil jwtUtil;
 
