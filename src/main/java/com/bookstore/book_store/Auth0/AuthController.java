@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
-public class AuthController {
+public class AuthController { 
     
     private final JwtUtil jwtUtil;
 
@@ -35,11 +35,15 @@ public class AuthController {
 
         ResponseCookie cookie = ResponseCookie.from("authToken", token)
         .httpOnly(true)
-        .secure(!"development".equals(System.getenv("ENV")))
-        .sameSite("Strict")
+        .secure(true)
+        .sameSite("none")
         .path("/")
         .maxAge(3600)
         .build();
+        
+        if(cookie == null){
+            System.out.println("Error creating cookie");
+        }
         
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
         return ResponseEntity.ok("Cookie set successfully");
