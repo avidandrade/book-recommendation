@@ -13,6 +13,7 @@ const BookCards = () => {
   const [query, setQuery] = useState("");
   const [initialSearchDone, setInitialSearchDone] = useState(false);
   const navigate = useNavigate();
+  const backend_url = import.meta.env.VITE_BACKEND_URL;
 
   const{
     books,

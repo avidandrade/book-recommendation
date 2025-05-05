@@ -9,6 +9,7 @@ const BookInfo = () => {
   const [isloading, setLoading] = useState(true);
   const [reviewSummary, setReviewSummary] = useState([]);
   const [summary, setSummary] = useState([]);
+  const backend_url = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchBookInfo = async () => {

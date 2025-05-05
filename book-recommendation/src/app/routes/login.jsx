@@ -22,6 +22,7 @@ export default function Login({onLogin}) {
     setLoading(true);
     setError(null);
 
+    const backend_url = import.meta.env.VITE_BACKEND_URL;
     const formData = new FormData(event.target);
     const email = formData.get('email');
     const password = formData.get('password');

@@ -11,6 +11,7 @@ import './App.css'
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const backend_url = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const checkAuth = async () => {
