@@ -69,7 +69,7 @@ export const useBooks = () => {
     
       const handleRetrieveBooks = async () => {
         try {
-          const response = await fetch(`http://localhost:8080/books`, {
+          const response = await fetch(`https://bookwise-206952a8a74e.herokuapp.com/books`, {
             method: "GET",
             credentials: 'include',
           });
