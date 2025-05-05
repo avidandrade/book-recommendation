@@ -14,7 +14,7 @@ const BookInfo = () => {
     const fetchBookInfo = async () => {
       try {
 
-        const response = await fetch(`http://localhost:8080/books/${isbn}`,{
+        const response = await fetch(`${backend_url}/books/${isbn}`,{
           headers:{
             "Content-Type": "application/json",
           },
@@ -30,8 +30,8 @@ const BookInfo = () => {
 
         if(data.title && data.rating){
           const [reviewResponse, summary] = await Promise.all([
-            fetch(`http://localhost:8080/review?title=${data.title}&rating=${data.rating}`),
-            fetch(`http://localhost:8080/summary?title=${data.title}`)
+            fetch(`${backend_url}/review?title=${data.title}&rating=${data.rating}`),
+            fetch(`${backend_url}/summary?title=${data.title}`)
           ]);
 
           const reviewText = await reviewResponse.text();

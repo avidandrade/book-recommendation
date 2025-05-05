@@ -15,7 +15,7 @@ function App() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch("https://bookwise-206952a8a74e.herokuapp.com/auth/verify", {
+        const response = await fetch(`${backend_url}/auth/verify`, {
           method: 'GET',
           credentials: 'include',
         });

@@ -11,7 +11,7 @@ export const useBooks = () => {
     const fetchBooks = async (SearchQuery) => {
         try {
           setLoading(true);
-          const response = await fetch(`http://localhost:8080/recommend?input=${SearchQuery}`, {
+          const response = await fetch(`${backend_url}/recommend?input=${SearchQuery}`, {
             method: "GET",
             credentials: 'include',
           });
@@ -27,7 +27,7 @@ export const useBooks = () => {
 
     const fetchLoadMore = async (query,titles) => {
         try {
-          const response = await fetch(`http://localhost:8080/moreBooks?input=${query}&titles=${titles}`,{
+          const response = await fetch(`${backend_url}/moreBooks?input=${query}&titles=${titles}`,{
             credentials: 'include',
           });
           const data = await response.json();
@@ -45,7 +45,7 @@ export const useBooks = () => {
     
       const handleSaveBook = async (book) => {
         try {
-          const response = await fetch(`http://localhost:8080/saveBook`, {
+          const response = await fetch(`${backend.url}/saveBook`, {
             method: "POST",
             headers: {
               "Content-Type" : "application/json",
@@ -69,7 +69,7 @@ export const useBooks = () => {
     
       const handleRetrieveBooks = async () => {
         try {
-          const response = await fetch(`https://bookwise-206952a8a74e.herokuapp.com/books`, {
+          const response = await fetch(`${backend_url}/books`, {
             method: "GET",
             credentials: 'include',
           });
@@ -86,7 +86,7 @@ export const useBooks = () => {
     
       const handleDeleteBook = async (bookId) => {
         try {
-          const response = await fetch(`http://localhost:8080/books/${bookId}`, {
+          const response = await fetch(`${backend_url}/books/${bookId}`, {
             method: "DELETE",
             credentials: 'include',
           });

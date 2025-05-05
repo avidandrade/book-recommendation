@@ -36,7 +36,7 @@ export default function Login({onLogin}) {
         throw new Error(error.message);
       }
 
-      const response = await fetch(`https://bookwise-206952a8a74e.herokuapp.com/auth/set-cookie`, {
+      const response = await fetch(`${backend_url}/auth/set-cookie`, {
         method:'POST',
         headers: {
           'Content-Type' : 'application/json',

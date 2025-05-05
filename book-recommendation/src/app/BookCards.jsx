@@ -28,7 +28,7 @@ const BookCards = () => {
   const handleLogout = async () => {
     try{
       await supabase.auth.signOut();
-      const response = await fetch(`http://localhost:8080/auth/logout`,{
+      const response = await fetch(`${backend_url}/auth/logout`,{
         method: "POST",
         credentials: 'include',
       });
