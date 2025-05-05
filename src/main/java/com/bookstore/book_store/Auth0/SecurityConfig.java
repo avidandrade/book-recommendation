@@ -1,6 +1,7 @@
 package com.bookstore.book_store.Auth0;
 
 import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,7 +31,7 @@ public class SecurityConfig {
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true); // Allow cookies
-        config.setAllowedOrigins(List.of("http://localhost:5173")); // Allow requests from your frontend
+        config.setAllowedOrigins(List.of("https://bookwise1.netlify.app")); // Allow requests from your frontend
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allow these HTTP methods
         config.setAllowedHeaders(List.of("*"));
 
