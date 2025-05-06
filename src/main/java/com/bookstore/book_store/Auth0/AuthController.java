@@ -54,8 +54,8 @@ public class AuthController {
     public ResponseEntity<?> logout(HttpServletResponse response){
         ResponseCookie cookie =  ResponseCookie.from("authToken","")
         .httpOnly(true)
-        .secure(!"development".equals(System.getenv("ENV")))
-        .sameSite("Strict")
+        .secure(true)
+        .sameSite("none")
         .path("/")
         .maxAge(0)
         .build();
