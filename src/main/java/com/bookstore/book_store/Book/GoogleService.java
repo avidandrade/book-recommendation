@@ -73,7 +73,7 @@ public class GoogleService {
                         coverImageUrl = imageLinks.path("thumbnail").asText();
                     }
                     coverImageUrl = coverImageUrl.replace("http://", "https://");
-
+                    System.out.println("Cover Image URl: " + coverImageUrl);
                     return new Book(title, authors, genre,description, isbn, coverImageUrl, rating,userId);
                 }       
             }
