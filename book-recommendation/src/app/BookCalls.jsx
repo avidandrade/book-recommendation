@@ -31,7 +31,7 @@ export const useBooks = () => {
             credentials: 'include',
           });
           const data = await response.json();
-          console.log(titles);
+    
             if (Array.isArray(data)) {
               setBooks((prevBooks) => [...prevBooks, ...data]);
             } else {
@@ -57,7 +57,6 @@ export const useBooks = () => {
             const savedBook = await response.json();
             setUserBooks((prevuserBooks) => [...prevuserBooks, savedBook]);
             toast.success("Book saved successfully!");
-            console.log("Book saved successfully", savedBook);
           } else {
             console.error("Error saving book");
             toast.error("Error saving book");
@@ -91,7 +90,6 @@ export const useBooks = () => {
             credentials: 'include',
           });
           if (response.ok) {
-            console.log("Book deleted successfully");
             toast.success("Book deleted successfully!");
             setUserBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookId));
           } else {

@@ -37,9 +37,7 @@ const BookInfo = () => {
 
           const reviewText = await reviewResponse.text();
           const summaryText = await summary.text();
-
-          console.log("Review "+ reviewText);
-          console.log("Summary " + summaryText);
+          
           setReviewSummary(reviewText);
           setSummary(summaryText);
         }
