@@ -1,39 +1,42 @@
 package com.bookstore.book_store.Ollama3;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 @Component
 public class OllamaClient {
     
     private final WebClient webClient;
     
-    public OllamaClient( @Value("${ollama.api.url}")String ollamaApiUrl) {
-        this.webClient = WebClient.builder().baseUrl(ollamaApiUrl).build();
+    @Value("${api.model.url}")
+    private String apiUrl;
+
+    @Value("{api.model.key}")
+    private String apiKey;
+
+    public OllamaClient(){
+        this.webClient = WebClient.builder()
+                .baseUrl(apiUrl)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)
+                .build();
     }
 
-    public String callModel(String prompt){
-        String response = webClient.post()
-                .uri("/api/generate")
-                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-                .bodyValue("{\"model\": \"llama3\", \"prompt\": \"" + prompt + "\"}")
+    public String callModel(String prompt) {
+        String requestBody = String.format("{\"model\": \"deepseek/deepseek-v3-base:free\", \"messages\": [{\"role\": \"user\", \"content\": \"%s\"}]}",
+                prompt);
+
+        return webClient.post()
+                .uri("/v1/chat/completions")
+                .bodyValue(requestBody)
                 .retrieve()
-                .bodyToFlux(OllamaResponse.class) // Deserialize streamed JSON objects
-                .map(OllamaResponse::getResponse) // Extract only the response text
-                .collectList() // Collect all parts into a list
-                .map(list -> String.join("", list)) // Join parts into a single response
-                .block(); // Block to wait for the full response
-
-        return response;
-    }
-
-    private static class OllamaResponse {
-        private String response;
-
-        public String getResponse() {
-            return response;
-        }
+                .bodyToMono(JsonNode.class)
+                .map(response -> response.path("choices").get(0).path("message").path("content").asText())
+                .block();
     }
 }
