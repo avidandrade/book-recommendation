@@ -16,6 +16,9 @@ public class SecurityConfig {
     @Value("${frontend.url}")
     private String frontendUrl;
 
+    @Value("${testfrontend.url}")
+    private String testFrontendUrl;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         http
@@ -34,7 +37,7 @@ public class SecurityConfig {
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true); // Allow cookies
-        config.setAllowedOrigins(List.of(frontendUrl)); // Allow requests from your frontend
+        config.setAllowedOrigins(List.of(frontendUrl, testFrontendUrl)); // Allow requests from your frontend
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allow these HTTP methods
         config.setAllowedHeaders(List.of("*"));
 
