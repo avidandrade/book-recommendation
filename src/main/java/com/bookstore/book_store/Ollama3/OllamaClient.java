@@ -1,48 +1,42 @@
 package com.bookstore.book_store.Ollama3;
 
-import com.azure.ai.inference.ChatCompletionsClient;
-import com.azure.ai.inference.ChatCompletionsClientBuilder;
-import com.azure.ai.inference.models.ChatCompletions;
-import com.azure.ai.inference.models.ChatCompletionsOptions;
-import com.azure.ai.inference.models.ChatRequestMessage;
-import com.azure.ai.inference.models.ChatRequestSystemMessage;
-import com.azure.ai.inference.models.ChatRequestUserMessage;
-import com.azure.core.credential.AzureKeyCredential;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.Arrays;
-import java.util.List;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @Component
 public class OllamaClient {
+    
+    private final WebClient webClient;
+    
+    @Value("${api.model.url}")
+    private String apiUrl;
 
-    private final ChatCompletionsClient client;
-    private final String model;
+    @Value("{api.model.key}")
+    private String apiKey;
 
-    public OllamaClient(
-        @Value("${github.model.token}") String token,
-        @Value("${github.model.endpoint}") String endpoint,
-        @Value("${github.model.model}") String model
-    ) {
-        this.model = model;
-        this.client = new ChatCompletionsClientBuilder()
-                .credential(new AzureKeyCredential(token))
-                .endpoint(endpoint)
-                .buildClient();
+    public OllamaClient(){
+        this.webClient = WebClient.builder()
+                .baseUrl(apiUrl)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)
+                .build();
     }
 
     public String callModel(String prompt) {
-        List<ChatRequestMessage> messages = Arrays.asList(
-                new ChatRequestSystemMessage(""),
-                new ChatRequestUserMessage(prompt)
-        );
+        String requestBody = String.format("{\"model\": \"deepseek/deepseek-v3-base:free\", \"messages\": [{\"role\": \"user\", \"content\": \"%s\"}]}",
+                prompt);
 
-        ChatCompletionsOptions options = new ChatCompletionsOptions(messages);
-        options.setModel(model);
-
-        ChatCompletions completions = client.complete(options);
-        return completions.getChoices().get(0).getMessage().getContent();
+        return webClient.post()
+                .uri("/v1/chat/completions")
+                .bodyValue(requestBody)
+                .retrieve()
+                .bodyToMono(JsonNode.class)
+                .map(response -> response.path("choices").get(0).path("message").path("content").asText())
+                .block();
     }
 }
-
