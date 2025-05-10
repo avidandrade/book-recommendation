@@ -3,8 +3,10 @@ package com.bookstore.book_store.Book;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -70,7 +72,8 @@ public class GoogleService {
                     if (imageLinks.has("thumbnail")) {
                         coverImageUrl = imageLinks.path("thumbnail").asText();
                     }
-
+                    coverImageUrl = coverImageUrl.replace("http://", "https://");
+                    System.out.println("Cover Image URl: " + coverImageUrl);
                     return new Book(title, authors, genre,description, isbn, coverImageUrl, rating,userId);
                 }       
             }

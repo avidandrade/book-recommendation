@@ -25,14 +25,11 @@ function App() {
           const data = await response.json();
           if (data.authenticated) {
             setIsAuthenticated(true);
-            console.log("Persisted");
           } else {
             setIsAuthenticated(false);
-            console.log("Not Persisted");
           }
         } else {
           setIsAuthenticated(false);
-          console.log("Not Persisted");
         }
       } catch (error) {
         console.error("Error verifying authentication:", error);

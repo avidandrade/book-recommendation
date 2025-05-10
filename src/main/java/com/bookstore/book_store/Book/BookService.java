@@ -34,10 +34,8 @@ public class BookService {
 
     public List<Book> fetchMoreBooks(String userInput, List<String> titles, String userId) {
         //Titles are sent so that the model avoids sending the same book.
-        List<String> bookTitles = ollamaService.getMoreBooks(userInput, titles);
-        if (bookTitles == null || bookTitles.isEmpty()) {
-            throw new RuntimeException("Ollama failed to generate more recommended book titles!");
-        }
+        List<String> bookTitles = Optional.ofNullable(ollamaService.getMoreBooks(userInput, titles))
+        .orElseThrow(() -> new RuntimeException("Ollama failed to generate more recommended book titles!"));
 
         // Fetch book details from Google Books API**
         return googleService.fetchRecommendedBooks(bookTitles,userId);

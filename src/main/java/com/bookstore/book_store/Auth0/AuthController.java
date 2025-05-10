@@ -41,10 +41,6 @@ public class AuthController {
         .maxAge(3600)
         .build();
         
-        if(cookie == null){
-            System.out.println("Error creating cookie");
-        }
-        
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
         return ResponseEntity.ok("Cookie set successfully");
     }
