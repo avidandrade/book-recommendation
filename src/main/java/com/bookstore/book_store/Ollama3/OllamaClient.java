@@ -12,14 +12,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class OllamaClient {
     
     private final WebClient webClient;
-    
-    @Value("${api.model.url}")
-    private String apiUrl;
 
-    @Value("${api.model.key}")
-    private String apiKey;
-
-    public OllamaClient(){
+    public OllamaClient(@Value("${api.model.url}") String apiUrl, @Value("${api.model.key}") String apiKey) {
         this.webClient = WebClient.builder()
                 .baseUrl(apiUrl)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -28,15 +22,14 @@ public class OllamaClient {
     }
 
     public String callModel(String prompt) {
-        String requestBody = String.format("{\"model\": \"deepseek/deepseek-v3-base:free\", \"messages\": [{\"role\": \"user\", \"content\": \"%s\"}]}",
-                prompt);
+        String requestBody = String.format("{\"inputs\": \"%s\"}", prompt);
 
         return webClient.post()
-                .uri("/v1/chat/completions")
+                .uri("/models/deepseek-ai/deepseek-v3-base")
                 .bodyValue(requestBody)
                 .retrieve()
                 .bodyToMono(JsonNode.class)
-                .map(response -> response.path("choices").get(0).path("message").path("content").asText())
+                .map(JsonNode::toPrettyString)
                 .block();
     }
 }
