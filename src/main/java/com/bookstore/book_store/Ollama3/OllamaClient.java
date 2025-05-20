@@ -16,7 +16,7 @@ public class OllamaClient {
     @Value("${api.model.url}")
     private String apiUrl;
 
-    @Value("{api.model.key}")
+    @Value("${api.model.key}")
     private String apiKey;
 
     public OllamaClient(){
