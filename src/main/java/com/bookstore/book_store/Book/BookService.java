@@ -27,7 +27,7 @@ public class BookService {
     public List<Book> fetchRecommendedBooks(String userInput, String userId) {
         //Get a book title from Ollama AI
         List<String> bookTitles = Optional.ofNullable(ollamaService.getRecommendedBookTitle(userInput))
-        .orElseThrow(() -> new RuntimeException("Ollama failed to generate book titles!"));
+        .orElseThrow(() -> new RuntimeException("Ollama failed to generate book titles!!"));
 
         return googleService.fetchRecommendedBooks(bookTitles,userId);
     }
