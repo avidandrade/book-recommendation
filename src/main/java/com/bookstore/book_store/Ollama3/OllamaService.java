@@ -43,17 +43,33 @@ public class OllamaService {
 
     
     public String getBookSummary(String title){
-        String prompt = "Provide a brief and concise summary of the book titled: '" + title + "'.";
+        var prompt = "Provide a brief and concise summary of the book titled: '" + title + "'.";
+        String lolW = "didnt work";
+        try{
+            String jsonResponse = ollamaClient.callModel(prompt);
+            JsonNode root = new ObjectMapper().readTree(jsonResponse);
+            String response = root.path("choices").get(0).path("message").path("content").asText();
 
-        return ollamaClient.callModel(prompt);
+            return response;
+        }catch(Exception e){
+            System.out.println("Not Book Summary genearted!");
+        }
+        return lolW;
     }
 
 
     public String getBookReview(String title, int rating){
         String prompt = "Summarize the opinions of other reviewers regarding the book titled: '" + title + "'. Explain the reasons behind its " + rating + " star rating, highlighting key factors that influenced the overall rating in one short paragraph.";
-        String response = ollamaClient.callModel(prompt);
-        System.out.println(response);
-        return response;
+         try{
+            String jsonResponse = ollamaClient.callModel(prompt);
+            JsonNode root = new ObjectMapper().readTree(jsonResponse);
+            String response = root.path("choices").get(0).path("message").path("content").asText();
+
+            return response;
+        }catch(Exception e){
+            System.out.println("Not Book Summary genearted!");
+        }
+        return null;
     }
     
 
