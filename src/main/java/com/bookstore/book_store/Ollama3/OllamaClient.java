@@ -20,7 +20,7 @@ public class OllamaClient {
     }
 
     public String callModel(String prompt) {
-        String requestBody = String.format("{\"model\": \"mistralai/mistral-7b-instruct\", \"messages\": [{\"role\": \"user\", \"content\": \"%s\"}]}", prompt);
+        String requestBody = String.format("{\"model\": \"llama3\", \"messages\": [{\"role\": \"user\", \"content\": \"%s\"}]}", prompt);
 
         return webClient.post()
                 .bodyValue(requestBody)
