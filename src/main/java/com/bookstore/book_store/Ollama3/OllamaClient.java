@@ -6,8 +6,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
 @Component
 public class OllamaClient {
     
@@ -22,14 +20,12 @@ public class OllamaClient {
     }
 
     public String callModel(String prompt) {
-        String requestBody = String.format("{\"inputs\": \"%s\"}", prompt);
+        String requestBody = String.format("{\"model\": \"mistralai/mistral-7b-instruct\", \"messages\": [{\"role\": \"user\", \"content\": \"%s\"}]}", prompt);
 
         return webClient.post()
-                .uri("/models/deepseek-ai/deepseek-v3-base")
                 .bodyValue(requestBody)
                 .retrieve()
-                .bodyToMono(JsonNode.class)
-                .map(JsonNode::toPrettyString)
+                .bodyToMono(String.class)
                 .block();
     }
 }
