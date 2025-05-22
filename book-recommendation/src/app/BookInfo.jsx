@@ -31,8 +31,12 @@ const BookInfo = () => {
 
         if(data.title && data.rating){
           const [reviewResponse, summary] = await Promise.all([
-            fetch(`${backend_url}/review?title=${data.title}&rating=${data.rating}`),
-            fetch(`${backend_url}/summary?title=${data.title}`)
+            fetch(`${backend_url}/review?title=${data.title}&rating=${data.rating}`, {
+              credentials: 'include'
+            }),
+            fetch(`${backend_url}/summary?title=${data.title}`, {
+              credentials:'include'
+            })
           ]);
 
           const reviewText = await reviewResponse.text();
