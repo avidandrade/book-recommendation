@@ -3,8 +3,6 @@ package com.bookstore.book_store.Ollama3;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
 
@@ -31,22 +29,12 @@ public class OllamaService {
             JsonNode root = new ObjectMapper().readTree(jsonResponse);
             String response  = root.path("choices").get(0).path("message").path("content").asText();
 
-            System.out.println("Here is the RESPONSE: " + response);
             // Block to wait for the full response
-            if(response != null){
-                
-                Pattern pattern = Pattern.compile("\"([^\"]+)\"");
-                Matcher matcher = pattern.matcher(response);
-                
-                List<String> titles = new ArrayList<>();
-                while(matcher.find()){
-                    titles.add(matcher.group(1));
-                }
-                System.out.println("POPULATED TITLES: " + titles);
-                return titles;
-            }else{
-                return new ArrayList<>();
-            }
+             if(response != null){
+                return Arrays.asList(response.split("\\s*,\\s*"));
+             }else{
+                System.out.println("Respones was empty");
+             }
         }catch(Exception error){
             System.err.println("Failed to parse JSON response");
         }
