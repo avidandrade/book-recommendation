@@ -42,7 +42,7 @@ public class OllamaService {
                 while(matcher.find()){
                     titles.add(matcher.group(1));
                 }
-
+                System.out.println("POPULATED TITLES: " + titles);
                 return titles;
             }else{
                 return new ArrayList<>();
