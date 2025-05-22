@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -21,22 +20,26 @@ public class OllamaService {
     }
     
 
-    public List<String> getRecommendedBookTitle(String userInput) throws JsonProcessingException {
-
+    public List<String> getRecommendedBookTitle(String userInput){
         var prompt = "Recommend five bestselling book titles that strongly reflect the emotion: '"
         + userInput + "'. Respond with a comma-separated list, with no numbering or extra text. Example: 'Book1, Book2, Book3, Book4, Book5'. just the book titles";
 
-        String jsonResponse = ollamaClient.callModel(prompt);
-        JsonNode root = new ObjectMapper().readTree(jsonResponse);
-        String response  = root.path("choices").get(0).path("message").path("content").asText();
-        
-        System.out.println("Here is the RESPONSE: " + response);
-        // Block to wait for the full response
-        if(response != null){
-            return Arrays.asList(response.split("\\s*,\\s*")); 
-        }else{
-            return new ArrayList<>();
+        try{
+            String jsonResponse = ollamaClient.callModel(prompt);
+            JsonNode root = new ObjectMapper().readTree(jsonResponse);
+            String response  = root.path("choices").get(0).path("message").path("content").asText();
+
+            System.out.println("Here is the RESPONSE: " + response);
+            // Block to wait for the full response
+            if(response != null){
+                return Arrays.asList(response.split("\\s*,\\s*")); 
+            }else{
+                return new ArrayList<>();
+            }
+        }catch(Exception error){
+            System.err.println("Failed to parse JSON response");
         }
+        return new ArrayList<>();
     }
 
     
