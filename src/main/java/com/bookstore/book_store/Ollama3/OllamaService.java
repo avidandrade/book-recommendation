@@ -22,7 +22,9 @@ public class OllamaService {
         String prompt = "Recommend five bestselling book titles that strongly reflect the emotion: '"
         + userInput + "'. Respond with a comma-separated list, with no numbering or extra text. Example: 'Book1, Book2, Book3, Book4, Book5'. just the book titles";
 
-        String response = ollamaClient.callModel(prompt); // Block to wait for the full response
+        String response = ollamaClient.callModel(prompt);
+        System.out.println("Here is the RESPONSE: " + response);
+        // Block to wait for the full response
         if(response != null){
             return Arrays.asList(response.split("\\s*,\\s*")); 
         }else{
