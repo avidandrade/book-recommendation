@@ -81,7 +81,7 @@ const BookInfo = () => {
         </div>
       <div className="w-2/3">
         <h2 className="text-xl font-bold p-2">Description</h2>
-        <p className="text-sm text-white-600 line-clamp-6">{book.description}</p>
+        <p className="text-sm text-white-600 line-clamp-10">{book.description}</p>
         <div className="mt-4">
           <h2 className="text-xl font-bold">Review</h2> 
           {reviewSummary ? (
