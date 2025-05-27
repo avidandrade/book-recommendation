@@ -28,7 +28,7 @@ public class JwtUtil {
             .parseClaimsJws(token)
             .getBody();
         } catch (ExpiredJwtException e) {
-        throw new RuntimeException("JWT Token is expired", e);
+            throw new RuntimeException("JWT Token is expired", e);
         } catch (UnsupportedJwtException e) {
             throw new RuntimeException("JWT Token is unsupported", e);
         } catch (MalformedJwtException e) {

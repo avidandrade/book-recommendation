@@ -12,34 +12,35 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class GoogleService {
+
     private final int maxResults = 5;
     private final String APL_Url = "https://www.googleapis.com/books/v1/volumes?q=";
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper mapper = new ObjectMapper();
-    
-    
-    public List<Book> fetchRecommendedBooks (List<String> bookTitles, String userId){
-        if(bookTitles == null || bookTitles.isEmpty()){
+
+    public List<Book> fetchRecommendedBooks(List<String> bookTitles, String userId) {
+        if (bookTitles == null || bookTitles.isEmpty()) {
             throw new RuntimeException("Ollama failed to generate book titles!");
         }
         List<Book> books = new ArrayList<>();
-        for(String title : bookTitles){
+        for (String title : bookTitles) {
             String url = APL_Url + title + "&maxResults=" + maxResults;
-            String response = restTemplate.getForObject(url,String.class);
-            books.add(parseResponse(response,userId));
+            String response = restTemplate.getForObject(url, String.class);
+            books.add(parseResponse(response, userId));
         }
 
         return books;
     }
 
-    public Book fetchBookData(String isbn, String userId){
+    public Book fetchBookData(String isbn, String userId) {
         String url = APL_Url + "isbn:" + isbn;
         String response = restTemplate.getForObject(url, String.class);
-        
+
         return parseResponse(response, userId);
     }
-    public Book parseResponse(String response, String userId){
-        try{
+
+    public Book parseResponse(String response, String userId) {
+        try {
             JsonNode root = mapper.readTree(response);
             JsonNode items = root.path("items");
             if (items.isArray()) {
@@ -48,7 +49,7 @@ public class GoogleService {
                     String authors = item.path("volumeInfo").path("authors").toString();
                     String description = item.path("volumeInfo").path("description").asText();
                     int rating = item.path("volumeInfo").path("averageRating").asInt();
-                    
+
                     // Extract ISBN
                     String isbn = "";
                     JsonNode industryIdentifiers = item.path("volumeInfo").path("industryIdentifiers");
@@ -74,14 +75,13 @@ public class GoogleService {
                     }
                     coverImageUrl = coverImageUrl.replace("http://", "https://");
                     System.out.println("Cover Image URl: " + coverImageUrl);
-                    return new Book(title, authors, genre,description, isbn, coverImageUrl, rating,userId);
-                }       
+                    return new Book(title, authors, genre, description, isbn, coverImageUrl, rating, userId);
+                }
             }
-        }catch(IOException e){
+        } catch (IOException e) {
             return null;
         }
         return null;
     }
-
 
 }
