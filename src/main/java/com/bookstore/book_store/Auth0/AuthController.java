@@ -3,27 +3,17 @@ package com.bookstore.book_store.Auth0;
 import java.util.Map;
 
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class AuthController { 
-    
-    private final JwtUtil jwtUtil;
-
-    public AuthController(JwtUtil jwtUtil){
-        this.jwtUtil = jwtUtil;
-    }
+  
     //Creates cookie and sends to browswer
     @PostMapping("/auth/set-cookie")
     public ResponseEntity<?> setCookie(@RequestBody Map<String,String> body, HttpServletResponse response){
@@ -58,31 +48,6 @@ public class AuthController {
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
         return ResponseEntity.ok("Cleared Cookie!");
-    }
-    
-    @GetMapping("/auth/verify")
-    public ResponseEntity<?> verifyAuth(HttpServletRequest request){
-        String authToken = null;
-
-        if(request.getCookies() != null){
-            for(Cookie cookie : request.getCookies()){
-                if("authToken".equals(cookie.getName())){
-                    authToken = cookie.getValue();
-                }
-            }
-        }
-
-        if (authToken != null) {
-            try {
-                Claims claims = jwtUtil.validateToken(authToken);
-                String userId = claims.getSubject();
-                return ResponseEntity.ok(Map.of("authenticated", true, "userId", userId));
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("authenticated", false));
-            }
-        }
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("authenticated", false));
     }
 }
 
