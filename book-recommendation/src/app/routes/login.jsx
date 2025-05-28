@@ -50,7 +50,6 @@ export default function Login({onLogin}) {
         throw new Error ('Failed to set authentication cookie');
       }
 
-      onLogin();
       navigate('/books');
     } catch (err) {
       setError(err.message);

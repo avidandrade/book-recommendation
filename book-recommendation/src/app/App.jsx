@@ -1,63 +1,39 @@
 
-import BookCards from './BookCards.jsx'
+import BookCards from './components/BookCards.jsx'
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import BookInfo from './BookInfo.jsx';
+import BookInfo from './components/BookInfo.jsx';
 import SignUp from './routes/sign-up.jsx';
 import Login from './routes/login.jsx';
 import { useState, useEffect } from 'react';
 import ForgotPassword from './routes/forgot-password.jsx';
 import './App.css'
+import { AuthProvider, useAuth } from './components/AuthContext.jsx'; 
 
-function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const backend_url = import.meta.env.VITE_BACKEND_URL;
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await fetch(`${backend_url}/auth/verify`, {
-          method: 'GET',
-          credentials: 'include',
-        });
-  
-        if (response.ok) {
-          const data = await response.json();
-          if (data.authenticated) {
-            setIsAuthenticated(true);
-          } else {
-            setIsAuthenticated(false);
-          }
-        } else {
-          setIsAuthenticated(false);
-        }
-      } catch (error) {
-        console.error("Error verifying authentication:", error);
-        setIsAuthenticated(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-  
-    checkAuth();
-  }, []);
+function AppRoutes() {
+  const {isAuthenticated, isLoading} = useAuth();
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
   return (
-    <Router>
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/login" element={<Login onLogin={() => setIsAuthenticated(true)} />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/sign-up" element={<SignUp/>}/>
         <Route path="/forgot-password" element={<ForgotPassword/>}/>
         <Route path="/books" element={isAuthenticated ? <BookCards /> : <Navigate to="/login"/>}/>
         <Route path="/books/:isbn" element={isAuthenticated ? <BookInfo/> : <Navigate to="/login"/>} />
       </Routes>
-    </Router>
   )
 }
 
-export default App
+export default function App(){
+  return (
+    <AuthProvider>
+      <Router>
+        <AppRoutes/>
+      </Router>
+    </AuthProvider>
+  );
+}
