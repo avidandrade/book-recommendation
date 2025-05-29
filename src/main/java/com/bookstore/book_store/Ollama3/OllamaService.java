@@ -74,11 +74,20 @@ public class OllamaService {
                 + userInput + "'. Do not include any of the following titles: " + String.join(", ", titles)
                 + ". Respond with a comma-separated list, with no numbering or extra text. Example: 'Book1, Book2, Book3, Book4, Book5'.";
 
-        String response = ollamaClient.callModel(prompt);
-        if (response != null) {
-            return Arrays.asList(response.split("\\s*,\\s*"));
-        } else {
-            return new ArrayList<>();
+        try{
+            String jsonResponse = ollamaClient.callModel(prompt);
+            JsonNode root = new ObjectMapper().readTree(jsonResponse);
+            String response = root.path("choices").get(0).path("message").path("content").asText();
+            
+            if(response != null){
+                return Arrays.asList(response.split("\\s*,\\s*"));
+            }else{
+                System.out.println("More books titles were not generated!");
+            }
+
+        }catch(Exception e){
+            System.out.println("Error calling more books");
         }
+        return null;
     }
 }
