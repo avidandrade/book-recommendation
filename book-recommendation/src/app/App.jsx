@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import BookInfo from './components/BookInfo.jsx';
 import SignUp from './routes/sign-up.jsx';
 import Login from './routes/login.jsx';
-import { useState, useEffect } from 'react';
 import ForgotPassword from './routes/forgot-password.jsx';
 import './App.css'
 import { AuthProvider, useAuth } from './components/AuthContext.jsx'; 
